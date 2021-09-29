@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Hibernate.Models.ViewModels.ApplicationUser>
 @{
-    ViewData["Title"] = "Admin Page";
+    ViewData["Title"] = "Sales Rep Page";
 }
 
 <style>
@@ -98,7 +98,7 @@
 
 
 <div class="text-center">
-    <h1>Admin Dashboard</h1>
+    <h1>Sales Rep Dashboard</h1>
 </div>
 
 <div class="sidebar-container border-info">
@@ -112,7 +112,7 @@
         @*<li>
             <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
         </li>*@
-        <li>
+        @*<li>
             <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
                 Unapproved Users List
             </a>
@@ -122,10 +122,14 @@
         </li>
         <li>
             <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
-        </li>
+        </li>*@
         @*<li>
             <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
         </li>*@
+        
+        <li>
+            <a asp-controller="Groups" asp-action="Index" class="btn btn-dark btn-outline-info">Groups List</a>
+        </li>
     </ul>
 </div>
 

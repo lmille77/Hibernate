@@ -1,4 +1,5 @@
-﻿using Hibernate.Models.ViewModels;
+﻿using Hibernate.Models;
+using Hibernate.Models.ViewModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,6 +17,8 @@ namespace Hibernate.Data
         }
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
 
     }
 }
