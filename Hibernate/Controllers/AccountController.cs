@@ -49,7 +49,8 @@ namespace Hibernate.Controllers
             if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
             {
                 await _roleManager.CreateAsync(new IdentityRole("Admin"));
-                await _roleManager.CreateAsync(new IdentityRole("Group"));
+                await _roleManager.CreateAsync(new IdentityRole("Sales Rep"));
+                await _roleManager.CreateAsync(new IdentityRole("Group Leader"));
                 await _roleManager.CreateAsync(new IdentityRole("Participant"));
                 await _roleManager.CreateAsync(new IdentityRole("Unapproved"));
                 ApplicationUser user = new ApplicationUser()
@@ -73,9 +74,9 @@ namespace Hibernate.Controllers
                 {
                     return RedirectToAction("Index", "SalesRep");
                 }
-                else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group"))
+                else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group Leader"))
                 {
-                    return RedirectToAction("Index", "Group");
+                    return RedirectToAction("Index", "GroupLeader");
                 }
                 else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
                 {
@@ -113,17 +114,17 @@ namespace Hibernate.Controllers
 
                     if (curr_user.isApproved == true && admin_role_list.Contains(curr_user))
                     {
-                        TempData[SD.Error] = "Your password will expire in three days.";
+                       
                         return RedirectToAction("Index", "Admin");
                     }
                     else if (curr_user.isApproved == true && group_role_list.Contains(curr_user))
                     {
-                        TempData[SD.Error] = "Your password will expire in three days.";
+                        
                         return RedirectToAction("Index", "Group");
                     }
                     else if (curr_user.isApproved == true && participant_role_list.Contains(curr_user))
                     {
-                        TempData[SD.Error] = "Your password will expire in three days.";
+                       
                         return RedirectToAction("Index", "Participant");
                     }
                     else
