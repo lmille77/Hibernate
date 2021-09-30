@@ -37,7 +37,15 @@ namespace Hibernate.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<IActionResult> Index()
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
+
+        public async Task<IActionResult> list()
         {
             
             var list = await _userManager.GetUsersInRoleAsync("Participant");

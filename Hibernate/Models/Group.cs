@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hibernate.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Hibernate.Models
     public class Group
     {
         [Key]
-        public int Id { get; set; }
+        public int GroupId { get; set; }
 
         [Display(Name ="Group Name")]
         [Required]
@@ -21,5 +22,16 @@ namespace Hibernate.Models
         public string City { get; set; }
 
         public string State { get; set; }
+
+
+
+        public string SalesRepId { get; set; }
+
+        public ApplicationUser SalesRep { get; set; }
+
+        public string GroupLeaderId { get; set; }
+
+        public ApplicationUser GroupLeader { get; set; }
+
     }
 }

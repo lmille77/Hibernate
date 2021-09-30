@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hibernate.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext :  IdentityDbContext<ApplicationUser> 
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -19,6 +19,6 @@ namespace Hibernate.Data
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         public DbSet<Group> Groups { get; set; }
-
+       
     }
 }
