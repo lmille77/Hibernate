@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,14 +25,10 @@ namespace Hibernate.Models
         public string State { get; set; }
 
 
+        public SalesRep SalesRep { get; set; }
 
-        public string SalesRepId { get; set; }
-
-        public ApplicationUser SalesRep { get; set; }
-
-        public string GroupLeaderId { get; set; }
-
-        public ApplicationUser GroupLeader { get; set; }
+        
+        public int SalesRepId { get; set; }
 
     }
 }

@@ -4,14 +4,16 @@ using Hibernate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210930220130_salesRep")]
+    partial class salesRep
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,7 +294,7 @@ namespace Hibernate.Migrations
             modelBuilder.Entity("Hibernate.Models.Group", b =>
                 {
                     b.HasOne("Hibernate.Models.SalesRep", "SalesRep")
-                        .WithMany()
+                        .WithMany("Groups")
                         .HasForeignKey("SalesRepId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -356,6 +358,11 @@ namespace Hibernate.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Hibernate.Models.SalesRep", b =>
+                {
+                    b.Navigation("Groups");
                 });
 
             modelBuilder.Entity("Hibernate.Models.ViewModels.ApplicationUser", b =>

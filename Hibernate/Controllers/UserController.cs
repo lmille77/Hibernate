@@ -88,11 +88,19 @@ namespace NewSwift.Controllers
                     return NotFound();
                 }
                 var userRole = _db.UserRoles.FirstOrDefault(u => u.UserId == objFromDb.Id);
+                var repId = _db.SalesReps.FirstOrDefault(u => u.UserId == objFromDb.Id);
+               
                 if (userRole != null)
                 {
                     var previousRoleName = _db.Roles.Where(u => u.Id == userRole.RoleId).Select(e => e.Name).FirstOrDefault();
+
+
                     //removing the old role
                     await _userManager.RemoveFromRoleAsync(objFromDb, previousRoleName);
+                    if(repId != null)
+                    {
+                        _db.SalesReps.Remove(repId);
+                    }
 
                 }
 
@@ -103,6 +111,23 @@ namespace NewSwift.Controllers
                 objFromDb.LastName = user.LastName;
                 objFromDb.DOB = user.DOB;
                 objFromDb.Address = user.Address;
+               
+
+
+
+
+                if (user.RoleId == "3a41fcf1-32f7-48b7-82e2-f8a67e78f653")
+                {
+                    var id = user.Id;
+                    var repToAdd = new SalesRep
+                    {
+                        UserId = id
+                    };
+
+                    _db.SalesReps.Add(repToAdd);
+                    
+                }
+                
                 _db.SaveChanges();
                 TempData[SD.Success] = "User has been edited successfully.";
                 return RedirectToAction(nameof(Index));

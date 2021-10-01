@@ -19,6 +19,6 @@ namespace Hibernate.Data
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         public DbSet<Group> Groups { get; set; }
-       
+        public DbSet<SalesRep> SalesReps { get; set; }
     }
 }

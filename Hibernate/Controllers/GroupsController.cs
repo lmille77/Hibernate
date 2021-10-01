@@ -7,17 +7,41 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Hibernate.Data;
 using Hibernate.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Hibernate.Models.ViewModels;
 
 namespace Hibernate.Controllers
 {
     public class GroupsController : Controller
     {
+        
+
+        private IConfiguration _configuration;
+        private IWebHostEnvironment _webHostEnvironment;
+
+
         private readonly ApplicationDbContext _context;
 
-        public GroupsController(ApplicationDbContext context)
+        //variables used to implement management of the user
+        UserManager<ApplicationUser> _userManager;
+        SignInManager<ApplicationUser> _signInManager;
+        RoleManager<IdentityRole> _roleManager;
+
+        public GroupsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+         SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager,
+         IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
+            _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
+
+
 
         // GET: Groups
         public async Task<IActionResult> Index()
@@ -44,25 +68,50 @@ namespace Hibernate.Controllers
         }
 
         // GET: Groups/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
             return View();
         }
 
+        //[Bind("Id,Name,Address,City,State")] Group @group
         // POST: Groups/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Address,City,State")] Group @group)
+        public async Task<IActionResult> Create(Group obj)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@group);
+               
+                
+
+                var id = _userManager.GetUserId(User);
+
+
+
+                //search salerep table 
+               
+                int repId = _context.SalesReps.Where(i => i.UserId == id).Select(i => i.SalesRepId).SingleOrDefault();
+
+                var groupToAdd = new Group
+                {
+                    SalesRepId = repId,
+                    Name = obj.Name,
+                    Address = obj.Address,
+                    City = obj.City,
+                    State = obj.State
+
+                    
+                };
+                _context.Add(groupToAdd);
+
+                //_context.Add(@group);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(@group);
+            return View(obj);
         }
 
         // GET: Groups/Edit/5

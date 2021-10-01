@@ -1,5 +1,6 @@
 ﻿using Hibernate.Data;
 using Hibernate.Helpers;
+using Hibernate.Models;
 using Hibernate.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -221,9 +222,10 @@ namespace Hibernate.Controllers
                     DOB = obj.DOB,
                     Address = obj.Address,
                     PasswordDate = DateTime.Now
+                    
                 };
-
-
+                var id = user.Id;
+                
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
@@ -238,6 +240,12 @@ namespace Hibernate.Controllers
                     }
                     if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Sales Rep")
                     {
+                        var repToAdd = new SalesRep
+                        {
+                            UserId = id
+                        };
+                        
+                        _db.SalesReps.Add(repToAdd );
                         await _userManager.AddToRoleAsync(user, "Sales Rep");
                     }
 
