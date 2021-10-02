@@ -98,26 +98,52 @@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Sales during the week', 'Sales per thousand made every day of the week'],
-          ['Monday',     11],
-          ['Tuesday',      14],
-          ['Wednesday',  13],
-          ['Thursday', 16],
-          ['Friday',    20]
-        ]);
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Sales during the week', 'Sales per thousand made every day of the week'],
+                ['Monday', 11],
+                ['Tuesday', 14],
+                ['Wednesday', 13],
+                ['Thursday', 16],
+                ['Friday', 20]
+            ]);
 
-        var options = {
-          title: 'Weekly sales',
-            is3D: true,
-          };
+            var options = {
+                title: 'Weekly sales',
+                is3D: true,
+            };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);
-      }
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Year', 'Assets', 'Liabilities'],
+                ['2004', 1000, 400],
+                ['2005', 1170, 460],
+                ['2006', 660, 1120],
+                ['2007', 1030, 540]
+            ]);
+
+            var options = {
+                title: 'Company Performance',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart.draw(data, options);
+        }
     </script>
 
 </head>
@@ -198,8 +224,10 @@
             </div>
         </div>
         <!--Add Chart Here-->
-        <div id="piechart_3d" style="width: 900px; height: 500px; align-content: center"></div>
+        <div id="piechart_3d" style="width: 700px; height: 300px; align-content: center"></div>
         <!--End of the Chart-->
+        <!-- Add line graph here-->
+        <div id="curve_chart" style="width: 700px; height: 300px; align-content: center"></div>
         <!-- Row -->
         <div class="row">
             <div class="col-lg-4 d-flex align-items-stretch">
@@ -273,7 +301,7 @@
                                     </div>
                                     <div class="desc">
                                         - Approve meeting with Tiger <br /><a href="javascript:void(0)"
-                                                                            class="
+                                                                              class="
                               btn
                               mt-2
                               me-1
