@@ -90,6 +90,14 @@
     .content-container {
         padding-left: 220px;
     }
+
+    .container-1{
+        display: flex;
+    }
+
+    .segment{
+        width: 50%
+    }
 </style>
 
 
@@ -224,98 +232,121 @@
             </div>
         </div>
         
+        <div class="container-1">
+            <div class="segment">
+            
             <!--Add Chart Here-->
             <div id="piechart_3d" style="width: 700px; height: 300px; align-content: center"></div>
             <!--End of the Chart-->
+            </div>
+            <div class="segment"
             <!-- Add line graph here-->
             <div id="curve_chart" style="width: 700px; height: 300px; align-content: center"></div>
-                        
+            <!--End of the Chart--> 
+            </div>
+         </div>
+
         
         <!-- Row -->
         <div class="row">
             <div class="col-lg-4 d-flex align-items-stretch">
                 <div class="card w-100">
                     <div class="card-body">
-                        <h4 class="card-title">Today's Schedule</h4>
-                        <h6 class="card-subtitle pb-3">
+                        <h2 class="card-title"><b>Today's Schedule</b></h2>
+                        <h5 class="card-subtitle pb-3">
                             Check out your daily schedule
-                        </h6>
-                        <div class="steamline mt-4">
-                            <div class="sl-item">
-                                <div class="sl-left bg-success">
-                                    <i class="ti-user"></i>
-                                </div>
-                                <div class="sl-right">
-                                    <div class="font-weight-medium">
-                                        Meeting today <span class="sl-date"> 5pm</span>
-                                    </div>
-                                    <div class="desc">- Check Sales</div>
-                                </div>
-                            </div>
-                            <div class="sl-item">
-                                <div class="sl-left bg-info">
-                                    <i class="fa fa-image"></i>
-                                </div>
-                                <div class="sl-right">
-                                    <div class="font-weight-medium">
-                                        - Send documents to Clark
-                                    </div>
-                                    <div class="desc">Tell Clark about the meeting</div>
-                                </div>
-                            </div>
-                            <div class="sl-item">
-                                <div class="sl-left">
-                                    <img class="rounded-circle"
-                                         alt="user"
-                                         src="../../assets/images/users/1.jpg" />
-                                </div>
-                                <div class="sl-right">
-                                    <div>
-                                        <a href="#">Gohn Doe</a>
-                                        <span class="sl-date">5 minutes ago</span>
-                                    </div>
-                                    <div class="desc">Call today with John Doe</div>
-                                </div>
-                            </div>
-                            <div class="sl-item">
-                                <div class="sl-left">
-                                    <img class="rounded-circle"
-                                         alt="user"
-                                         src="../../assets/images/users/2.jpg" />
-                                </div>
-                                <div class="sl-right">
-                                    <div class="font-weight-medium">
-                                        Go to the Doctor
-                                        <span class="sl-date">5 minutes ago</span>
-                                    </div>
-                                    <div class="desc">- Make phone calls to solve customers delivery issues</div>
-                                </div>
-                            </div>
-                            <div class="sl-item">
-                                <div class="sl-left">
-                                    <img class="rounded-circle"
-                                         alt="user"
-                                         src="../../assets/images/users/3.jpg" />
-                                </div>
-                                <div class="sl-right">
-                                    <div>
-                                        <a href="#">Tiger Sroff</a>
-                                        <span class="sl-date">5 minutes ago</span>
-                                    </div>
-                                    <div class="desc">
-                                        - Approve meeting with Tiger <br /><a href="javascript:void(0)"
-                                                                              class="
-                              btn
-                              mt-2
-                              me-1
-                              btn-rounded btn-outline-success
-                            ">Approve</a>
-                                        <a href="javascript:void(0)"
-                                           class="btn mt-2 btn-rounded btn-outline-danger">Refuse</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </h5>
+
+                        <form action="/action_page.php" method="get">
+                            <input type="checkbox" name="check1" value="Sales">
+                            <label for="check1">Check Sales</label><br>
+                            <input type="checkbox" name="check2" value="Meeting">
+                            <label for="check2">Tell Clark about the meeting</label><br>
+                            <input type="checkbox" name="check3" value="Solve">
+                            <label for="check3">Make phone calls to customers</label><br>
+                            <input type="checkbox" name="check4" value="Approve">
+                            <label for="check4">Approve meeting with Tiger</label><br>
+                            <input type="checkbox" name="check5" value="Call">
+                            <label for="check5">Call today with John Doe</label><br><br>
+                            <input type="submit" value="Submit">
+
+                        </form>
+                        @* <div class="steamline mt-4">
+            <div class="sl-item">
+                <div class="sl-left bg-success">
+                    <i class="ti-user"></i>
+                </div>
+                <div class="sl-right">
+                    <div class="font-weight-medium">
+                        Meeting today <span class="sl-date"> 5pm</span>
+                    </div>
+                    <div class="desc">Check Sales</div>
+                </div>
+            </div>
+            <div class="sl-item">
+                <div class="sl-left bg-info">
+                    <i class="fa fa-image"></i>
+                </div>
+                <div class="sl-right">
+                    <div class="font-weight-medium">
+                        - Send documents to Clark
+                    </div>
+                    <div class="desc">Tell Clark about the meeting</div>
+                </div>
+            </div>
+            <div class="sl-item">
+                <div class="sl-left">
+                    <img class="rounded-circle"
+                         alt="user"
+                         src="../../assets/images/users/1.jpg" />
+                </div>
+                <div class="sl-right">
+                    <div>
+                        <a href="#">Gohn Doe</a>
+                        <span class="sl-date">5 minutes ago</span>
+                    </div>
+                    <div class="desc">Call today with John Doe</div>
+                </div>
+            </div>
+            <div class="sl-item">
+                <div class="sl-left">
+                    <img class="rounded-circle"
+                         alt="user"
+                         src="../../assets/images/users/2.jpg" />
+                </div>
+                <div class="sl-right">
+                    <div class="font-weight-medium">
+                        Go to the Doctor
+                        <span class="sl-date">5 minutes ago</span>
+                    </div>
+                    <div class="desc">- Make phone calls to solve customers delivery issues</div>
+                </div>
+            </div>
+            <div class="sl-item">
+                <div class="sl-left">
+                    <img class="rounded-circle"
+                         alt="user"
+                         src="../../assets/images/users/3.jpg" />
+                </div>
+                <div class="sl-right">
+                    <div>
+                        <a href="#">Tiger Sroff</a>
+                        <span class="sl-date">5 minutes ago</span>
+                    </div>
+                    <div class="desc">
+                        - Approve meeting with Tiger <br /><a href="javascript:void(0)"
+                                                              class="
+              btn
+              mt-2
+              me-1
+              btn-rounded btn-outline-success
+            ">Approve</a>
+                        <a href="javascript:void(0)"
+                           class="btn mt-2 btn-rounded btn-outline-danger">Refuse</a>
+                    </div>
+                </div>
+            </div>
+        </div> *@
                     </div>
                 </div>
             </div>
