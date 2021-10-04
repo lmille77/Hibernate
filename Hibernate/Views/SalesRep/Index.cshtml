@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Hibernate.Models.ViewModels.ApplicationUser>
 @{
-    ViewData["Title"] = "Participant Page";
+    ViewData["Title"] = "Sales Rep Page";
 }
 
 <style>
@@ -98,7 +98,7 @@
 
 
 <div class="text-center">
-    <h1>Participant Dashboard</h1>
+    <h1>Sales Rep Dashboard</h1>
 </div>
 
 <div class="sidebar-container border-info">
@@ -110,25 +110,54 @@
 
     <ul class="sidebar-navigation">
         @*<li>
-                <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
-            </li>*@
+            <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
+        </li>*@
         @*<li>
-                <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
-                    Unapproved Users List
-                </a>
-            </li>
-            <li>
-                <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
-            </li>
-            <li>
-                <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
-            </li>*@
-        @*<li>
-                <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
-            </li>*@
-
+            <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
+                Unapproved Users List
+            </a>
+        </li>
         <li>
-            <a asp-controller="Supporters" asp-action="Index" class="btn btn-dark btn-outline-info">Supporters List</a>
+            <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
+        </li>
+        <li>
+            <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
+        </li>*@
+        @*<li>
+            <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
+        </li>*@
+        
+        <li>
+            <a asp-controller="Groups" asp-action="Index" class="btn btn-dark btn-outline-info">Groups List</a>
         </li>
     </ul>
 </div>
+
+<!--
+
+
+
+
+
+
+<p class="col-md-10 offset-md-2">
+    <a asp-action="Send" class="btn btn-success">Send Message</a>
+</p>
+
+<p class="col-md-10 offset-md-2">
+    <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-success">Unapproved Users List</a>
+</p>
+
+<p class="col-md-10 offset-md-2">
+    <a asp-controller="User" asp-action="Index" class="btn btn-success"> Users List</a>
+</p>
+
+<p class="col-md-10 offset-md-2">
+    <a asp-controller="Roles" asp-action="Index" class="btn btn-success"> Roles List</a>
+</p>
+
+<p class="col-md-10 offset-md-2">
+    <a asp-controller="expiredpass" asp-action="Index" class="btn btn-success"> Expired Passwords List</a>
+</p>
+
+-->

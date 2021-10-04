@@ -1,4 +1,5 @@
 ﻿using Hibernate.Models.ValidationClasses;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -39,5 +40,9 @@ namespace Hibernate.Models.ViewModels
 
         public string DOB { get; set; }
 
+
+        public IEnumerable<SelectListItem> RoleList { get; set; }
+       
+        public string RoleSelected { get; set; }
     }
 }

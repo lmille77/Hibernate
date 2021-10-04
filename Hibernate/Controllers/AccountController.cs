@@ -1,9 +1,11 @@
 ﻿using Hibernate.Data;
 using Hibernate.Helpers;
+using Hibernate.Models;
 using Hibernate.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols;
@@ -48,7 +50,8 @@ namespace Hibernate.Controllers
             if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
             {
                 await _roleManager.CreateAsync(new IdentityRole("Admin"));
-                await _roleManager.CreateAsync(new IdentityRole("Group"));
+                await _roleManager.CreateAsync(new IdentityRole("Sales Rep"));
+                await _roleManager.CreateAsync(new IdentityRole("Group Leader"));
                 await _roleManager.CreateAsync(new IdentityRole("Participant"));
                 await _roleManager.CreateAsync(new IdentityRole("Unapproved"));
                 ApplicationUser user = new ApplicationUser()
@@ -68,9 +71,13 @@ namespace Hibernate.Controllers
                 {
                     return RedirectToAction("Index", "Admin");
                 }
-                else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group"))
+                else if (_signInManager.IsSignedIn(User) && User.IsInRole("Sales Rep"))
                 {
-                    return RedirectToAction("Index", "Group");
+                    return RedirectToAction("Index", "SalesRep");
+                }
+                else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group Leader"))
+                {
+                    return RedirectToAction("Index", "GroupLeader");
                 }
                 else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
                 {
@@ -108,17 +115,17 @@ namespace Hibernate.Controllers
 
                     if (curr_user.isApproved == true && admin_role_list.Contains(curr_user))
                     {
-                        TempData[SD.Error] = "Your password will expire in three days.";
+                       
                         return RedirectToAction("Index", "Admin");
                     }
                     else if (curr_user.isApproved == true && group_role_list.Contains(curr_user))
                     {
-                        TempData[SD.Error] = "Your password will expire in three days.";
+                        
                         return RedirectToAction("Index", "Group");
                     }
                     else if (curr_user.isApproved == true && participant_role_list.Contains(curr_user))
                     {
-                        TempData[SD.Error] = "Your password will expire in three days.";
+                       
                         return RedirectToAction("Index", "Participant");
                     }
                     else
@@ -136,27 +143,58 @@ namespace Hibernate.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Register()
+        public async Task<IActionResult> Register(string returnurl = null)
         {
-            //if the user roles are not already stored in the database, then they are added            
-            if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            ////if the user roles are not already stored in the database, then they are added            
+            //if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            //{
+            //    return RedirectToAction("Index", "Admin");
+            //}
+            //else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group"))
+            //{
+            //    return RedirectToAction("Index", "Group");
+            //}
+            //else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
+            //{
+            //    return RedirectToAction("Index", "Participant");
+            //}
+            //else if (_signInManager.IsSignedIn(User) && User.IsInRole("Unapproved"))
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            listItems.Add(new SelectListItem()
             {
-                return RedirectToAction("Index", "Admin");
-            }
-            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group"))
+                Value = "Admin",
+                Text = "Admin"
+            });
+            listItems.Add(new SelectListItem()
             {
-                return RedirectToAction("Index", "Group");
-            }
-            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
-            {
-                return RedirectToAction("Index", "Participant");
-            }
-            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Unapproved"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
+                Value = "Sales Rep",
+                Text = "Sales Rep"
+            });
 
-            return View();
+            listItems.Add(new SelectListItem()
+            {
+                Value = "Group Leader",
+                Text = "Group Leader"
+            });
+
+            listItems.Add(new SelectListItem()
+            {
+                Value = "Participant",
+                Text = "Participant"
+            });
+
+
+
+            ViewData["ReturnUrl"] = returnurl;
+            RegisterViewModel registerViewModel = new RegisterViewModel()
+            {
+                RoleList = listItems
+            };
+
+            return View(registerViewModel);
 
         }
 
@@ -167,6 +205,8 @@ namespace Hibernate.Controllers
 
             string _Firstname = obj.FirstName.ToLower();
             string _Lastname = obj.LastName.ToLower();
+
+          
 
             if (ModelState.IsValid)
             {
@@ -182,44 +222,119 @@ namespace Hibernate.Controllers
                     DOB = obj.DOB,
                     Address = obj.Address,
                     PasswordDate = DateTime.Now
+                    
                 };
+                var id = user.Id;
+                
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
 
-                //finds  all admin user
-                var admin_users = await _userManager.GetUsersInRoleAsync("Admin");
-                var admin_email = "";
-
-                foreach (ApplicationUser admin_user in admin_users)
-                {
-                    if (admin_user.isApproved == true)
-                    {
-                        admin_email = admin_user.Email;
-                        break;
-                    }
-                }
 
                 if (result.Succeeded)
                 {
-                    //sends an email to admin requesting approval for new user
-                    var subject = "Add new user";
-                    var body = "<a href='https://localhost:44316/Account/Login'>Click to Add User </a>";
-                    var mailHelper = new MailHelper(_configuration);
-                    mailHelper.Send(_configuration["Gmail:Username"], admin_email, subject, body);
 
-                    //adds user to database but without admin approval
-                    await _userManager.AddToRoleAsync(user, "Unapproved");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Admin")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+                    if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Sales Rep")
+                    {
+                        var repToAdd = new SalesRep
+                        {
+                            UserId = id
+                        };
+                        
+                        _db.SalesReps.Add(repToAdd );
+                        await _userManager.AddToRoleAsync(user, "Sales Rep");
+                    }
+
+                    if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Group Leader")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Group Leader");
+                    }
+
+                    if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Participant")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                   
+                    
+                    var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+
+                    var Email = obj.Email;
+                    var subject = "Account Confirmation";
+                    var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
+                    var mailHelper = new MailHelper(_configuration);
+                    mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
+
+                    TempData[SD.Success] = "Account Created";
+                    return RedirectToAction("Index", "Admin");
+
                 }
                 else
                 {
                     ModelState.AddModelError("", "An account with the entered email already exists.");
                 }
+
+
+                ////finds  all admin user
+                //var admin_users = await _userManager.GetUsersInRoleAsync("Admin");
+                //var admin_email = "";
+
+                    //foreach (ApplicationUser admin_user in admin_users)
+                    //{
+                    //    if (admin_user.isApproved == true)
+                    //    {
+                    //        admin_email = admin_user.Email;
+                    //        break;
+                    //    }
+                    //}
+
+                    //if (result.Succeeded)
+                    //{
+                    //    //sends an email to admin requesting approval for new user
+                    //    var subject = "Add new user";
+                    //    var body = "<a href='https://localhost:44316/Account/Login'>Click to Add User </a>";
+                    //    var mailHelper = new MailHelper(_configuration);
+                    //    mailHelper.Send(_configuration["Gmail:Username"], admin_email, subject, body);
+
+                    //    //adds user to database but without admin approval
+                    //    await _userManager.AddToRoleAsync(user, "Unapproved");
+                    //    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //    return RedirectToAction("Index", "Home");
+                //    //}
+                //else
+                //{
+                //    ModelState.AddModelError("", "An account with the entered email already exists.");
+                //}
             }
             return View(obj);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return View("Error");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+
+        }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

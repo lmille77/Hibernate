@@ -1,12 +1,20 @@
 ﻿@model Hibernate.Models.ViewModels.LoginViewModel
-<br />
+
+
+<h4 class="text-center">Hibernate Funds</h4>
+<center><img src="~/frontend/hibernate_img.jpg" alt=”Image” style="width:200px; height:200px"></center>
+
+
 <div class="text-center">
-    <img src="~/frontend/hibernate_img.jpg" alt=”Image” style="width:200px; height:200px">
+    <h6>Sign in with your email and password</h6>
 </div>
-    
-<br />
-<h4 class="col-md-8 offset-md-4">Hibernate</h4>
-<h5 class="col-md-8 offset-md-4">Sign in with your email and password</h5>
+
+
+
+<div class="row">
+
+</div>
+
 
 <div class="row col-md-6 mx-auto">
     <div class="col-md-8 offset-md-2">
@@ -15,21 +23,18 @@
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
 
-                <div class="form-group">
-                    <label class="col-md-2" asp-for="Email"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
+                <div class="input-group">                    
+                    <input asp-for="Email" placeholder="Email" type="text" class="form-control" aria-label="Username" aria-describedby="addon-wrapping" />
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-2" asp-for="Password"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
+                <br />
+
+                <div class="input-group">                    
+                    <input asp-for="Password" placeholder="Password" class="form-control" aria-label="Username" aria-describedby="addon-wrapping" />
                 </div>
+
+                <br />
+                <br />
 
                 <div class="form-group">
                     <div class=" col-md-10 offset-md-2">
@@ -38,7 +43,7 @@
                 </div>
 
                 <p class="col-md-10 offset-md-2">
-                    <a asp-action="Register">Create Account</a>
+                    <a asp-action="Register">Request Access</a>
                 </p>
                 <p class="col-md-10 offset-md-2">
                     <a asp-action="ResetPassword">Forgot Password</a>
