@@ -158,9 +158,7 @@
 </head>
 <body>
     <br />
-    <div class="text-center" style="margin-left:50px">
-        <h4>Admin Dashboard</h4>
-    </div>
+    <h2 class="text-center" style="margin-left:50px">Admin Overview</h2>
     <br />
     <div class="sidebar-container border-info">
         <div>
@@ -170,27 +168,32 @@
         </div>
 
         <ul class="sidebar-navigation">
-        @*<li>
+            @*<li>
             <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
         </li>*@
-        <li>
-            <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
-                Unapproved Users List
-            </a>
-        </li>
-        <li>
-            <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
-        </li>
-        <li>
-            <a asp-controller="Groups" asp-action="Index" class="btn btn-dark btn-outline-info">Groups List</a>
-        </li>
-        <li>
-            <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
-        </li>
-        @*<li>
+            <li>
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-info btn-outline-light">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
+                    Unapproved Users List
+                </a>
+            </li>
+            <li>
+                <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
+            </li>
+            <li>
+                <a asp-controller="Groups" asp-action="Index" class="btn btn-dark btn-outline-info">Groups List</a>
+            </li>
+            <li>
+                <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
+            </li>
+            @*<li>
             <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
         </li>*@
-    </ul>
+        </ul>
     </div>
 
     <!-- ============================================================== -->
@@ -507,6 +510,7 @@
         </div>
     </div>
     <br />
+ 
 
 
 
