@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Hibernate.Models.ViewModels.ApplicationUser>
 @{
-    ViewData["Title"] = "Participant Page";
+    ViewData["Title"] = "Group Leader Page";
 }
 
 <style>
@@ -98,7 +98,7 @@
 
 
 <div class="text-center">
-    <h1>Participant Dashboard</h1>
+    <h1>Group Leader Dashboard</h1>
 </div>
 
 <div class="sidebar-container border-info">
@@ -128,7 +128,7 @@
             </li>*@
 
         <li>
-            <a asp-controller="Supporters" asp-action="Index" class="btn btn-dark btn-outline-info">Supporters List</a>
+            <a asp-controller="Participant" asp-action="list" class="btn btn-dark btn-outline-info">Participants List</a>
         </li>
     </ul>
 </div>

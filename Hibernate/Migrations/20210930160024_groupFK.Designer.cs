@@ -4,14 +4,16 @@ using Hibernate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210930160024_groupFK")]
+    partial class groupFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,38 +34,26 @@ namespace Hibernate.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GroupLeaderId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SalesRepId")
-                        .HasColumnType("int");
+                    b.Property<string>("SalesRepId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GroupId");
 
+                    b.HasIndex("GroupLeaderId");
+
                     b.HasIndex("SalesRepId");
 
                     b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("Hibernate.Models.SalesRep", b =>
-                {
-                    b.Property<int>("SalesRepId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("SalesRepId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SalesReps");
                 });
 
             modelBuilder.Entity("Hibernate.Models.ViewModels.ApplicationUser", b =>
@@ -291,20 +281,17 @@ namespace Hibernate.Migrations
 
             modelBuilder.Entity("Hibernate.Models.Group", b =>
                 {
-                    b.HasOne("Hibernate.Models.SalesRep", "SalesRep")
+                    b.HasOne("Hibernate.Models.ViewModels.ApplicationUser", "GroupLeader")
                         .WithMany()
-                        .HasForeignKey("SalesRepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupLeaderId");
+
+                    b.HasOne("Hibernate.Models.ViewModels.ApplicationUser", "SalesRep")
+                        .WithMany()
+                        .HasForeignKey("SalesRepId");
+
+                    b.Navigation("GroupLeader");
 
                     b.Navigation("SalesRep");
-                });
-
-            modelBuilder.Entity("Hibernate.Models.SalesRep", b =>
-                {
-                    b.HasOne("Hibernate.Models.ViewModels.ApplicationUser", null)
-                        .WithMany("SalesReps")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -356,11 +343,6 @@ namespace Hibernate.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Hibernate.Models.ViewModels.ApplicationUser", b =>
-                {
-                    b.Navigation("SalesReps");
                 });
 #pragma warning restore 612, 618
         }

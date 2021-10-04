@@ -37,6 +37,7 @@ namespace Hibernate.Models.ViewModels
         [NotMapped]
         public IEnumerable<SelectListItem> RoleList { get; set; }
 
-
+        [ForeignKey("UserId")]
+        public virtual ICollection<SalesRep> SalesReps { get; set; }
     }
 }
