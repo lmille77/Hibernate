@@ -44,7 +44,11 @@ namespace Hibernate.Controllers
 
 
         // GET: Groups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> SRIndex()
+        {
+            return View(await _context.Groups.ToListAsync());
+        }
+        public async Task<IActionResult> AdminIndex()
         {
             return View(await _context.Groups.ToListAsync());
         }
@@ -69,7 +73,7 @@ namespace Hibernate.Controllers
 
         // GET: Groups/Create
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> SRCreate()
         {
             return View();
         }
@@ -80,17 +84,11 @@ namespace Hibernate.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Group obj)
+        public async Task<IActionResult> SRCreate(Group obj)
         {
             if (ModelState.IsValid)
             {
-               
-                
-
                 var id = _userManager.GetUserId(User);
-
-
-
                 //search salerep table 
                
                 int repId = _context.SalesReps.Where(i => i.UserId == id).Select(i => i.SalesRepId).SingleOrDefault();
@@ -109,7 +107,91 @@ namespace Hibernate.Controllers
 
                 //_context.Add(@group);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("SRIndex","Groups");
+            }
+            return View(obj);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AdminCreate()
+        {
+            var userList = _context.ApplicationUser.ToList();
+            var srList = _context.SalesReps.ToList();
+            List<SelectListItem> salesreps = new List<SelectListItem>();
+            foreach (var sr in srList)
+            {
+                foreach(var user in userList)
+                {
+                    if(user.Id == sr.UserId)
+                    {
+                        SelectListItem li = new SelectListItem
+                        {
+                            Value = sr.UserId,
+                            Text = user.FirstName + " " + user.LastName,
+
+                        };
+                        salesreps.Add(li);
+                        ViewBag.Users = salesreps;
+                    }
+                    
+                }                
+                
+            }
+            return View();
+        }
+
+        //[Bind("Id,Name,Address,City,State")] Group @group
+        // POST: Groups/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AdminCreate(Group obj)
+        {
+            var userList = _context.ApplicationUser.ToList();
+            var srList = _context.SalesReps.ToList();
+            List<SelectListItem> salesreps = new List<SelectListItem>();
+            foreach (var sr in srList)
+            {
+                foreach (var user in userList)
+                {
+                    if (user.Id == sr.UserId)
+                    {
+                        SelectListItem li = new SelectListItem
+                        {
+                            Value = sr.UserId,
+                            Text = user.FirstName + " " + user.LastName,
+
+                        };
+                        salesreps.Add(li);
+                        ViewBag.Users = salesreps;
+                    }
+
+                }
+
+            }
+            if (ModelState.IsValid)
+            {
+                var id = obj.AssignId;
+                //search salerep table 
+
+                int repId = _context.SalesReps.Where(i => i.UserId == id).Select(i => i.SalesRepId).SingleOrDefault();
+                
+
+                var groupToAdd = new Group
+                {
+                    SalesRepId = repId,
+                    Name = obj.Name,
+                    Address = obj.Address,
+                    City = obj.City,
+                    State = obj.State
+
+
+                };
+                _context.Add(groupToAdd);
+                _context.SaveChanges();
+                TempData[SD.Success] = "Account Created";
+                return RedirectToAction("Index", "Admin");
             }
             return View(obj);
         }

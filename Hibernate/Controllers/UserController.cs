@@ -1,9 +1,13 @@
 ﻿using Hibernate;
 using Hibernate.Data;
+using Hibernate.Helpers;
 using Hibernate.Models;
 using Hibernate.Models.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +19,16 @@ namespace NewSwift.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _db;
+        private IConfiguration _configuration;
+        private IWebHostEnvironment _webHostEnvironment;
 
-
-        public UserController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public UserController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, 
+            IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _db = db;
+            _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
 
@@ -106,12 +114,8 @@ namespace NewSwift.Controllers
 
                 //add new role
                 await _userManager.AddToRoleAsync(objFromDb, _db.Roles.FirstOrDefault(u => u.Id == user.RoleId).Name);
-                objFromDb.CustomUsername = user.CustomUsername;
                 objFromDb.FirstName = user.FirstName;
                 objFromDb.LastName = user.LastName;
-                objFromDb.DOB = user.DOB;
-                objFromDb.Address = user.Address;
-               
 
 
 
@@ -184,10 +188,259 @@ namespace NewSwift.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> CreateParticipant()
+        {
+            var groupList = _db.Groups.ToList();
+            List<SelectListItem> groups = new List<SelectListItem>();
+            foreach (var group in groupList)
+            {
+                SelectListItem li = new SelectListItem
+                {
+                    Value = group.Name,
+                    Text = group.Name,
+
+                };
+                groups.Add(li);
+                ViewBag.Users = groups;
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateParticipant(RegisterViewModel obj)
+        {
+
+            string _Firstname = obj.FirstName.ToLower();
+            string _Lastname = obj.LastName.ToLower();
+
+            var groupList = _db.Groups.ToList();
+            List<SelectListItem> groups = new List<SelectListItem>();
+            foreach (var group in groupList)
+            {
+                SelectListItem li = new SelectListItem
+                {
+                    Value = group.Name,
+                    Text = group.Name,
+
+                };
+                groups.Add(li);
+                ViewBag.Users = groups;
+            }
+
+            if (ModelState.IsValid)
+            {
+                //object created by user input
+                ApplicationUser user = new ApplicationUser()
+                {
+                    UserName = obj.Email,
+                    CustomUsername = _Firstname[0] + _Lastname + DateTime.Now.ToString("yyMM"),
+                    FirstName = obj.FirstName,
+                    LastName = obj.LastName,
+                    Email = obj.Email,
+                    isApproved = true,
+                    PasswordDate = DateTime.Now,
+                    groupName= obj.GroupSelected
+
+                };
+                var id = user.Id;
+
+
+                //creates user
+                var result = await _userManager.CreateAsync(user, obj.Password);
+
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, "Participant");                 
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var Email = obj.Email;
+                    var subject = "Account Confirmation";
+                    var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
+                    var mailHelper = new MailHelper(_configuration);
+                    mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
+                    TempData[SD.Success] = "Account Created";
+                    return RedirectToAction("Index", "Admin");
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "An account with the entered email already exists.");
+                }
+                               
+            }
+            return View(obj);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateGL()
+        {
+            var groupList = _db.Groups.ToList();
+            List<SelectListItem> groups = new List<SelectListItem>();
+            foreach (var group in groupList)
+            {
+                SelectListItem li = new SelectListItem
+                {
+                    Value = group.Name,
+                    Text = group.Name,
+
+                };
+                groups.Add(li);
+                ViewBag.Users = groups;
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateGL(RegisterViewModel obj)
+        {
+
+            string _Firstname = obj.FirstName.ToLower();
+            string _Lastname = obj.LastName.ToLower();
+
+            var groupList = _db.Groups.ToList();
+            List<SelectListItem> groups = new List<SelectListItem>();
+            foreach (var group in groupList)
+            {
+                SelectListItem li = new SelectListItem
+                {
+                    Value = group.Name,
+                    Text = group.Name,
+
+                };
+                groups.Add(li);
+                ViewBag.Users = groups;
+            }
+
+            if (ModelState.IsValid)
+            {
+                //object created by user input
+                ApplicationUser user = new ApplicationUser()
+                {
+                    UserName = obj.Email,
+                    CustomUsername = _Firstname[0] + _Lastname + DateTime.Now.ToString("yyMM"),
+                    FirstName = obj.FirstName,
+                    LastName = obj.LastName,
+                    Email = obj.Email,
+                    isApproved = true,
+                    PasswordDate = DateTime.Now,
+                    groupName = obj.GroupSelected
+
+                };
+                var id = user.Id;
+
+
+                //creates user
+                var result = await _userManager.CreateAsync(user, obj.Password);
+
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, "Group Leader");
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var Email = obj.Email;
+                    var subject = "Account Confirmation";
+                    var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
+                    var mailHelper = new MailHelper(_configuration);
+                    mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
+                    TempData[SD.Success] = "Account Created";
+                    return RedirectToAction("Index", "Admin");
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "An account with the entered email already exists.");
+                }
+
+            }
+            return View(obj);
+        }
+        [HttpGet]
+        public async Task<IActionResult> CreateSR()
+        {
+            var groupList = _db.Groups.ToList();
+            List<SelectListItem> groups = new List<SelectListItem>();
+            foreach (var group in groupList)
+            {
+                SelectListItem li = new SelectListItem
+                {
+                    Value = group.Name,
+                    Text = group.Name,
+
+                };
+                groups.Add(li);
+                ViewBag.Users = groups;
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateSR(RegisterViewModel obj)
+        {
+
+            string _Firstname = obj.FirstName.ToLower();
+            string _Lastname = obj.LastName.ToLower();
 
 
 
+            if (ModelState.IsValid)
+            {
+                //object created by user input
+                ApplicationUser user = new ApplicationUser()
+                {
+                    UserName = obj.Email,
+                    CustomUsername = _Firstname[0] + _Lastname + DateTime.Now.ToString("yyMM"),
+                    FirstName = obj.FirstName,
+                    LastName = obj.LastName,
+                    Email = obj.Email,
+                    isApproved = true,
+                    PasswordDate = DateTime.Now,
 
+                };
+                var id = user.Id;
+
+
+                //creates user
+                var result = await _userManager.CreateAsync(user, obj.Password);
+
+
+                if (result.Succeeded)
+                {
+                    var repToAdd = new SalesRep
+                    {
+                        UserId = user.Id
+                    };
+
+                    _db.SalesReps.Add(repToAdd);
+                    _db.SaveChanges();
+                    await _userManager.AddToRoleAsync(user, "Sales Rep");
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var Email = obj.Email;
+                    var subject = "Account Confirmation";
+                    var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
+                    var mailHelper = new MailHelper(_configuration);
+                    mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
+                    TempData[SD.Success] = "Account Created";
+                    return RedirectToAction("Index", "Admin");
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "An account with the entered email already exists.");
+                }
+
+            }
+            return View(obj);
+        }
     }
 
 }

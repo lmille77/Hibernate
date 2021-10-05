@@ -38,7 +38,7 @@ namespace Hibernate.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {

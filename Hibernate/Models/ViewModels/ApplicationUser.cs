@@ -22,9 +22,6 @@ namespace Hibernate.Models.ViewModels
 
         public DateTime PasswordDate { get; set; }
 
-        public string Address { get; set; }
-
-        public string DOB { get; set; }
 
         //just used to display in the view, not stored in database
         [NotMapped]
@@ -39,5 +36,6 @@ namespace Hibernate.Models.ViewModels
 
         [ForeignKey("UserId")]
         public virtual ICollection<SalesRep> SalesReps { get; set; }
+        public string groupName { get; set; }
     }
 }
