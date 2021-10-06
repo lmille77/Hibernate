@@ -110,7 +110,7 @@ namespace Hibernate.Controllers
                     //checks to see if a user has been approved by an admin and redirects accordingly
                     var curr_user = await _userManager.FindByNameAsync(obj.Email);
                     var admin_role_list = await _userManager.GetUsersInRoleAsync("Admin");
-                    var group_role_list = await _userManager.GetUsersInRoleAsync("Group");
+                    var sr_role_list = await _userManager.GetUsersInRoleAsync("Sales Rep");
                     var participant_role_list = await _userManager.GetUsersInRoleAsync("Participant");
 
                     if (curr_user.isApproved == true && admin_role_list.Contains(curr_user))
@@ -118,10 +118,10 @@ namespace Hibernate.Controllers
                        
                         return RedirectToAction("Index", "Admin");
                     }
-                    else if (curr_user.isApproved == true && group_role_list.Contains(curr_user))
+                    else if (curr_user.isApproved == true && sr_role_list.Contains(curr_user))
                     {
                         
-                        return RedirectToAction("Index", "Group");
+                        return RedirectToAction("Index", "SalesRep");
                     }
                     else if (curr_user.isApproved == true && participant_role_list.Contains(curr_user))
                     {
