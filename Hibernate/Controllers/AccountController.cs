@@ -275,22 +275,41 @@ namespace Hibernate.Controllers
         }
 
         [HttpPost]
-        public IActionResult ResetPassword(Message obj)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(Message obj)
         {
+            var user = await _userManager.FindByEmailAsync(obj.ToEmail);
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            //sends them to 
+            var callbackurl = Url.Action("ConfirmResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+
+            //"<a href='https://localhost:44316/Account/Login'>Click to Add User </a>"
+
             var toEmail = obj.ToEmail;
             var subject = "Password Reset Confirmation";
-            var body = "Please click the link to reset your password. https://localhost:44316/Account/ConfirmResetPassword";
+            var body = "Please reset your password by clicking <a href=\"" + callbackurl + "\"> here";
             var mailHelper = new MailHelper(_configuration);
             mailHelper.Send(_configuration["Gmail:Username"], toEmail, subject, body);
+
+            TempData[SD.Success] = "Check email for password reset link.";
             return RedirectToAction("Index", "Admin");
 
         }
+      
+        
+        
+        
         //Password Reset Confirmation Action
         [HttpGet]
-        public IActionResult ConfirmResetPassword()
+        public IActionResult ConfirmResetPassword(string code = null)
         {
-            return View();
+            return code == null ? View("Error") : View();
         }
+       
+        
+        
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmResetPassword(PasswdReset obj)
@@ -338,14 +357,16 @@ namespace Hibernate.Controllers
                 if (passcheck == true)
                 {
 
+
                     curr_user.LastPass2 = curr_user.LastPass1;
                     curr_user.LastPass1 = curr_user.PasswordHash;
                     await _userManager.UpdateAsync(curr_user);
 
-                    await _userManager.RemovePasswordAsync(curr_user);
-                    await _userManager.AddPasswordAsync(curr_user, obj.NewPass);
+                   // await _userManager.RemovePasswordAsync(curr_user);
+                    await _userManager.ResetPasswordAsync(curr_user, obj.Code, obj.NewPass);
+                   // await _userManager.AddPasswordAsync(curr_user, obj.NewPass);
 
-
+                    TempData[SD.Success] = "Password was successfully reset.";
                     return RedirectToAction("Login", "Account");
                 }
             }
