@@ -296,20 +296,42 @@ namespace Hibernate.Controllers
             return RedirectToAction("Index", "Admin");
 
         }
-      
-        
-        
-        
-        //Password Reset Confirmation Action
+
+
+
+
         [HttpGet]
-        public IActionResult ConfirmResetPassword(string code = null)
+        public IActionResult ConfirmResetPassword(string userId, string code = null)
         {
-            return code == null ? View("Error") : View();
+            var objFromDb = _db.ApplicationUser.FirstOrDefault(u => u.Id == userId);
+            if (objFromDb == null)
+            {
+                return NotFound();
+            }
+
+
+            var userRole = _db.UserRoles.ToList();
+            var roles = _db.Roles.ToList();
+
+            //this will find if there are any roles assigned to the user
+            var role = userRole.FirstOrDefault(u => u.UserId == objFromDb.Id);
+            if (role != null)
+            {
+                objFromDb.RoleId = roles.FirstOrDefault(u => u.Id == role.RoleId).Id;
+            }
+            objFromDb.RoleList = _db.Roles.Select(u => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id
+            });
+            PasswdReset newobj = new PasswdReset();
+            newobj.Email = objFromDb.Email;
+            return code == null ? View("Error") : View(newobj);
         }
-       
-        
-        
-        
+
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmResetPassword(PasswdReset obj)
