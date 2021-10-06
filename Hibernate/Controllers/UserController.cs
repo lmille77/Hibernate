@@ -119,7 +119,7 @@ namespace NewSwift.Controllers
 
 
 
-                var repRole = _db.Roles.Where(u => u.Name == "Admin").Select(e => e.Id).FirstOrDefault();
+                var repRole = _db.Roles.Where(u => u.Name == "Sales Rep").Select(e => e.Id).FirstOrDefault();
 
                 if (user.RoleId == repRole)
                 {
