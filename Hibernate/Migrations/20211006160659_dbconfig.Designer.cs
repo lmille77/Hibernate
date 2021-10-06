@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211006144253_pass")]
-    partial class pass
+    [Migration("20211006160659_dbconfig")]
+    partial class dbconfig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

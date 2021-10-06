@@ -263,7 +263,7 @@ namespace NewSwift.Controllers
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
                     TempData[SD.Success] = "Account Created";
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "User");
 
                 }
                 else
@@ -350,7 +350,7 @@ namespace NewSwift.Controllers
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
                     TempData[SD.Success] = "Account Created";
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "User");
 
                 }
                 else
@@ -430,7 +430,7 @@ namespace NewSwift.Controllers
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
                     TempData[SD.Success] = "Account Created";
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "User");
 
                 }
                 else

@@ -191,7 +191,7 @@ namespace Hibernate.Controllers
                 _context.Add(groupToAdd);
                 _context.SaveChanges();
                 TempData[SD.Success] = "Account Created";
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("AdminIndex", "Groups");
             }
             return View(obj);
         }
