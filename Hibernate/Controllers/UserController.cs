@@ -119,8 +119,9 @@ namespace NewSwift.Controllers
 
 
 
+                var repRole = _db.Roles.Where(u => u.Name == "Admin").Select(e => e.Id).FirstOrDefault();
 
-                if (user.RoleId == "3a41fcf1-32f7-48b7-82e2-f8a67e78f653")
+                if (user.RoleId == repRole)
                 {
                     var id = user.Id;
                     var repToAdd = new SalesRep
