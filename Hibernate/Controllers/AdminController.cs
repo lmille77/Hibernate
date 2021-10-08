@@ -38,13 +38,17 @@ namespace Hibernate.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {
                 return View();
             }
-            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group"))
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Sales Rep"))
+            {
+                return RedirectToAction("Index", "SalesRep");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group Leader"))
             {
                 return RedirectToAction("Index", "Group");
             }
