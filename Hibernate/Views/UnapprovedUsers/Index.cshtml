@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Hibernate.Models.ViewModels.ApplicationUser>
 <br />
-<h2 class="text-center" style="margin-left:50px">Unapproved User List</h2>
+<h2 class="text-center" style="margin-left:50px">Pending Approvals</h2>
 
 <div class="sidebar-container border-info">
     <div>
@@ -20,14 +20,14 @@
         </li>
         <li>
             <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-info btn-outline-light">
-                Unapproved Users List
+                Pending Approvals
             </a>
         </li>
         <li>
             <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
         </li>
         <li>
-            <a asp-controller="Groups" asp-action="Index" class="btn btn-dark btn-outline-info">Groups List</a>
+            <a asp-controller="Groups" asp-action="AdminIndex" class="btn btn-dark btn-outline-info">Groups List</a>
         </li>
         <li>
             <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
@@ -50,6 +50,9 @@
                 <th>
                     Name
                 </th>
+                <th>
+                    Group
+                </th>
 
                 <th></th>
             </tr>
@@ -59,44 +62,47 @@
                 {
 
 
-                    <tr>
-                        <td>
-                            @item.Email
-                        </td>
-                        <td>
-                            @item.FirstName  @item.LastName
-                        </td>
+        <tr>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @item.FirstName  @item.LastName
+            </td>
+            <td>
+                @item.groupName
+            </td>
 
-                        <td>
-                            <div class="text-center">
-                                <form asp-action="Delete" asp-route-userId="@item.Id">
+            <td>
+                <div class="text-center">
+                    <form asp-action="Delete" asp-route-userId="@item.Id">
 
-                                    @if (item.isApproved == false)
-                                    {
-                                        //We want to show them the option to lock
-                                        <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-success text-white"
-                                                style="cursor:pointer">
-                                            <span>&nbsp; Accept &nbsp;</span>
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        //We want to show them the option to unlock
-                                        <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-warning text-white"
-                                                style="cursor:pointer">
-                                            <span> Approved </span>
-                                        </button>
-                                    }
+                        @if (item.isApproved == false)
+                        {
+                            //We want to show them the option to lock
+                            <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-success text-white"
+                                    style="cursor:pointer">
+                                <span>&nbsp; Accept &nbsp;</span>
+                            </button>
+                        }
+                        else
+                        {
+                            //We want to show them the option to unlock
+                            <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-warning text-white"
+                                    style="cursor:pointer">
+                                <span> Approved </span>
+                            </button>
+                        }
 
 
-                                    <button onclick="return confirm('Are you sure you want to reject this user?')"
-                                            class="btn btn-danger">
-                                        Reject
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+                        <button onclick="return confirm('Are you sure you want to reject this user?')"
+                                class="btn btn-danger">
+                            Reject
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
                 }
             }
         </table>

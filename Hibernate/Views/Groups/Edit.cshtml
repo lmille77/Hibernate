@@ -1,5 +1,5 @@
 ﻿@model Hibernate.Models.Group
-
+@inject Microsoft.AspNetCore.Identity.SignInManager<Hibernate.Models.ViewModels.ApplicationUser> signInManager
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -41,9 +41,22 @@
     </div>
 </div>
 
+
+@if (User.IsInRole("Admin"))
+{
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="AdminIndex">Back to List</a>
 </div>
+}
+@if (User.IsInRole("Sales Rep"))
+{
+<div>
+    <a asp-action="SRIndex">Back to List</a>
+</div>
+}
+
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

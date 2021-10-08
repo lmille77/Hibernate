@@ -29,27 +29,7 @@ namespace Hibernate.Controllers
 
         public IActionResult Index()
         {
-            if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-            {
-
-                return RedirectToAction("Index", "Admin");
-            }
-            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group"))
-            {
-                return RedirectToAction("Index", "Group");
-            }
-            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
-            {
-                return RedirectToAction("Index", "Participant");
-            }
-            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Unapproved"))
-            {                
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            return View();
         }
 
         public IActionResult Privacy()

@@ -31,7 +31,7 @@ namespace Hibernate.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var all_users = await _userManager.GetUsersInRoleAsync("Unapproved");
+            var all_users = await _userManager.GetUsersInRoleAsync("Participant");
             return View(all_users);
         }
 
@@ -75,6 +75,45 @@ namespace Hibernate.Controllers
 
             _db.SaveChanges();
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult EditRole(string userId)
+        {
+            var objFromDb = _db.ApplicationUser.FirstOrDefault(u => u.Id == userId);
+            if (objFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(objFromDb);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRole(ApplicationUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                var objFromDb = _db.ApplicationUser.FirstOrDefault(u => u.Id == user.Id);
+                if (objFromDb == null)
+                {
+                    return NotFound();
+                }
+                var userRole = _db.UserRoles.FirstOrDefault(u => u.UserId == objFromDb.Id);
+                if (userRole != null)
+                {
+                    var previousRoleName = _db.Roles.Where(u => u.Id == userRole.RoleId).Select(e => e.Name).FirstOrDefault();
+                    //removing the old role
+                    await _userManager.RemoveFromRoleAsync(objFromDb, previousRoleName);
+
+                }
+                objFromDb.FirstName = user.FirstName;
+                objFromDb.LastName = user.LastName;                
+                //add new role
+                await _userManager.AddToRoleAsync(objFromDb, user.RoleId);
+                _db.SaveChanges();
+                TempData[SD.Success] = "User has been edited successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
         }
     }
 }

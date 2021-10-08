@@ -3,17 +3,45 @@
     ViewData["Title"] = "Sales Rep Page";
 }
 
+
+
+
+
+
+
+<br />
+<h2 class="text-center" style="margin-left:50px">Sales Rep Overview</h2>
+<br />
+
+<div class="sidebar-container border-info">
+    <div>
+        <br />
+        <div class="text-center">Quick Actions</div>
+        <br />
+    </div>
+
+    <ul class="sidebar-navigation">
+
+        <li>
+            <a asp-controller="Index" asp-action="SalesRep" class="btn btn-info btn-outline-light">Dashboard</a>
+        </li>
+        <li>
+            <a asp-controller="Groups" asp-action="SRIndex" class="btn btn-dark btn-outline-info">Groups List</a>
+        </li>
+    </ul>
+</div>
+
 <style>
     .sidebar-container {
-        position: fixed;
-        width: 220px;
-        height: 100%;
+        position: absolute;
+        width: 250px;
+        height: 90%;
         left: 0;
         overflow-x: hidden;
         overflow-y: auto;
         background: #36454F;
         color: #fff;
-        top: 55px;
+        top: 57px;
         border-style: solid;
     }
 
@@ -90,74 +118,12 @@
     .content-container {
         padding-left: 220px;
     }
+
+    .container-1 {
+        display: flex;
+    }
+
+    .segment {
+        width: 50%
+    }
 </style>
-
-
-
-
-
-
-<div class="text-center">
-    <h1>Sales Rep Dashboard</h1>
-</div>
-
-<div class="sidebar-container border-info">
-    <div>
-        <br />
-        <div class="text-center">Quick Actions</div>
-        <br />
-    </div>
-
-    <ul class="sidebar-navigation">
-        @*<li>
-            <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
-        </li>*@
-        @*<li>
-            <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
-                Unapproved Users List
-            </a>
-        </li>
-        <li>
-            <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
-        </li>
-        <li>
-            <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
-        </li>*@
-        @*<li>
-            <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
-        </li>*@
-        
-        <li>
-            <a asp-controller="Groups" asp-action="Index" class="btn btn-dark btn-outline-info">Groups List</a>
-        </li>
-    </ul>
-</div>
-
-<!--
-
-
-
-
-
-
-<p class="col-md-10 offset-md-2">
-    <a asp-action="Send" class="btn btn-success">Send Message</a>
-</p>
-
-<p class="col-md-10 offset-md-2">
-    <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-success">Unapproved Users List</a>
-</p>
-
-<p class="col-md-10 offset-md-2">
-    <a asp-controller="User" asp-action="Index" class="btn btn-success"> Users List</a>
-</p>
-
-<p class="col-md-10 offset-md-2">
-    <a asp-controller="Roles" asp-action="Index" class="btn btn-success"> Roles List</a>
-</p>
-
-<p class="col-md-10 offset-md-2">
-    <a asp-controller="expiredpass" asp-action="Index" class="btn btn-success"> Expired Passwords List</a>
-</p>
-
--->

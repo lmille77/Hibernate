@@ -39,7 +39,7 @@ namespace Hibernate.Controllers
 
 
         public IActionResult Index()
-        {
+        {            
             return View();
         }
 
@@ -119,11 +119,9 @@ namespace Hibernate.Controllers
 
                 ////add new role
                 //await _userManager.AddToRoleAsync(objFromDb, _db.Roles.FirstOrDefault(u => u.Id == user.RoleId).Name);
-                objFromDb.CustomUsername = user.CustomUsername;
+                
                 objFromDb.FirstName = user.FirstName;
                 objFromDb.LastName = user.LastName;
-                objFromDb.DOB = user.DOB;
-                objFromDb.Address = user.Address;
                 _db.SaveChanges();
                 TempData[SD.Success] = "User has been edited successfully.";
                 return RedirectToAction(nameof(Index));
@@ -168,8 +166,6 @@ namespace Hibernate.Controllers
                     LastName = obj.LastName,
                     Email = obj.Email,
                     isApproved = false,
-                    DOB = obj.DOB,
-                    Address = obj.Address,
                     PasswordDate = DateTime.Now
                 };
 

@@ -51,11 +51,12 @@
         <br />
         <div class="form-group row">
             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <div class="col-md-8">
-                <select asp-for="RoleSelected" asp-items="@Model.RoleList" class="form-control" style="color:gray">
-                    <option disabled selected>--Select Role--</option>
+            <div class="col-md-6">
+                <select asp-for="GroupSelected" asp-items="@ViewBag.Users" class="form-control">
+                    <option disabled selected>--Select a Group--</option>
                 </select>
             </div>
+
         </div>
         <br />
 

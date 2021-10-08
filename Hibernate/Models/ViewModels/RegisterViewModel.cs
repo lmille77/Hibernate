@@ -36,13 +36,10 @@ namespace Hibernate.Models.ViewModels
         [Compare("Password", ErrorMessage = "The passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string Address { get; set; }
-
-        public string DOB { get; set; }
-
 
         public IEnumerable<SelectListItem> RoleList { get; set; }
        
         public string RoleSelected { get; set; }
+        public string GroupSelected { get; set; }
     }
 }
