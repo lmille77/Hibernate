@@ -212,7 +212,7 @@ namespace Hibernate.Controllers
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
 
                     TempData[SD.Success] = "Account Created";
-                    return RedirectToAction("Index", "Participant");
+                    return RedirectToAction("list", "Participant");
 
                 }
                 else
