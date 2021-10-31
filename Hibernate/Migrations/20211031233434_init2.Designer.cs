@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211024222127_removeGroup")]
-    partial class removeGroup
+    [Migration("20211031233434_init2")]
+    partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,6 +71,74 @@ namespace Hibernate.Migrations
                     b.ToTable("GroupLeaders");
                 });
 
+            modelBuilder.Entity("Hibernate.Models.Item", b =>
+                {
+                    b.Property<int>("ItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("ItemId");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupporterId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("float");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.HasIndex("SupporterId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Order_Item", b =>
+                {
+                    b.Property<int>("OrderItemsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemsId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Order_Items");
+                });
+
             modelBuilder.Entity("Hibernate.Models.Participant", b =>
                 {
                     b.Property<int>("ParticipantId")
@@ -110,18 +178,27 @@ namespace Hibernate.Migrations
 
             modelBuilder.Entity("Hibernate.Models.Supporter", b =>
                 {
-                    b.Property<int>("SupporterID")
+                    b.Property<int>("SupporterId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ParticipantId")
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ParticipantId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SupporterID");
+                    b.HasKey("SupporterId");
 
                     b.HasIndex("ParticipantId");
 
@@ -367,6 +444,40 @@ namespace Hibernate.Migrations
                     b.Navigation("Group");
                 });
 
+            modelBuilder.Entity("Hibernate.Models.Order", b =>
+                {
+                    b.HasOne("Hibernate.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantId");
+
+                    b.HasOne("Hibernate.Models.Supporter", "Supporter")
+                        .WithMany()
+                        .HasForeignKey("SupporterId");
+
+                    b.Navigation("Participant");
+
+                    b.Navigation("Supporter");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Order_Item", b =>
+                {
+                    b.HasOne("Hibernate.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hibernate.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Hibernate.Models.Participant", b =>
                 {
                     b.HasOne("Hibernate.Models.Group", "Group")
@@ -389,7 +500,9 @@ namespace Hibernate.Migrations
                 {
                     b.HasOne("Hibernate.Models.Participant", "Participant")
                         .WithMany()
-                        .HasForeignKey("ParticipantId");
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Participant");
                 });

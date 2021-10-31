@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Hibernate.Migrations
 {
-    public partial class init : Migration
+    public partial class init2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,7 +33,6 @@ namespace Hibernate.Migrations
                     LastPass1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastPass2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PasswordDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    groupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -52,6 +51,20 @@ namespace Hibernate.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    ItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.ItemId);
                 });
 
             migrationBuilder.CreateTable(
@@ -246,20 +259,77 @@ namespace Hibernate.Migrations
                 name: "Supporters",
                 columns: table => new
                 {
-                    SupporterID = table.Column<int>(type: "int", nullable: false)
+                    SupporterId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ParticipantId = table.Column<int>(type: "int", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ParticipantId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Supporters", x => x.SupporterID);
+                    table.PrimaryKey("PK_Supporters", x => x.SupporterId);
                     table.ForeignKey(
                         name: "FK_Supporters_Participants_ParticipantId",
                         column: x => x.ParticipantId,
                         principalTable: "Participants",
                         principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    SupporterId = table.Column<int>(type: "int", nullable: true),
+                    ParticipantId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Orders_Participants_ParticipantId",
+                        column: x => x.ParticipantId,
+                        principalTable: "Participants",
+                        principalColumn: "ParticipantId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Orders_Supporters_SupporterId",
+                        column: x => x.SupporterId,
+                        principalTable: "Supporters",
+                        principalColumn: "SupporterId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order_Items",
+                columns: table => new
+                {
+                    OrderItemsId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order_Items", x => x.OrderItemsId);
+                    table.ForeignKey(
+                        name: "FK_Order_Items_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "ItemId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Order_Items_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -312,6 +382,26 @@ namespace Hibernate.Migrations
                 column: "SalesRepId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Order_Items_ItemId",
+                table: "Order_Items",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_Items_OrderId",
+                table: "Order_Items",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ParticipantId",
+                table: "Orders",
+                column: "ParticipantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_SupporterId",
+                table: "Orders",
+                column: "SupporterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Participants_GroupId",
                 table: "Participants",
                 column: "GroupId");
@@ -348,10 +438,19 @@ namespace Hibernate.Migrations
                 name: "GroupLeaders");
 
             migrationBuilder.DropTable(
-                name: "Supporters");
+                name: "Order_Items");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Supporters");
 
             migrationBuilder.DropTable(
                 name: "Participants");
