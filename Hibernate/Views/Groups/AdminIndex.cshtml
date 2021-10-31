@@ -58,11 +58,11 @@
     </ul>
 </div>
 
-<table class="table" style="width: 900px; margin-left:175px;" id="table"
+<table class="table table-striped border" style="width: 900px; margin-left:175px;" id="table"
        data-toggle="table"
        data-search="true"
        data-filter-control="true">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th data-field="name" data-sortable="true">
                 @Html.DisplayNameFor(model => model.Name)
@@ -76,6 +76,9 @@
             <th data-field="state" data-sortable="true">
                 @Html.DisplayNameFor(model => model.State)
             </th>
+            @*<th>
+                Sales Rep
+            </th>*@
             <th>Actions</th>
         </tr>
     </thead>
@@ -95,6 +98,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.State)
                 </td>
+                @*<td>
+                    @item.SalesRepName
+                </td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.GroupId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.GroupId">Details</a> |

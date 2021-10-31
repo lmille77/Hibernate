@@ -196,7 +196,7 @@ namespace Hibernate.Controllers
                     Email = obj.Email,
                     isApproved = false,
                     PasswordDate = DateTime.Now,
-                    groupName = obj.GroupSelected
+                    //groupName = obj.GroupSelected
                     
                     
                 };

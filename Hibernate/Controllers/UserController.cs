@@ -242,7 +242,7 @@ namespace NewSwift.Controllers
                     Email = obj.Email,
                     isApproved = true,
                     PasswordDate = DateTime.Now,
-                    groupName= obj.GroupSelected
+                    //groupName= obj.GroupSelected
 
                 };
                 var id = user.Id;
@@ -250,10 +250,21 @@ namespace NewSwift.Controllers
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
-
+                var groupId = _db.Groups.Where(u => u.Name == obj.GroupSelected).Select(e => e.GroupId).FirstOrDefault();
 
                 if (result.Succeeded)
                 {
+
+                    var partToAdd = new Participant
+                    {
+                        UserId = user.Id,
+                        GroupId = groupId
+                    };
+
+                    _db.Participants.Add(partToAdd);
+                    _db.SaveChanges();
+
+
                     await _userManager.AddToRoleAsync(user, "Participant");                 
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -329,18 +340,31 @@ namespace NewSwift.Controllers
                     Email = obj.Email,
                     isApproved = true,
                     PasswordDate = DateTime.Now,
-                    groupName = obj.GroupSelected
+                    //groupName = obj.GroupSelected
 
                 };
+                
+                var groupId = _db.Groups.Where(u => u.Name == obj.GroupSelected).Select(e => e.GroupId).FirstOrDefault();
+
                 var id = user.Id;
 
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
-
+                //creates user
+               
 
                 if (result.Succeeded)
                 {
+                    var GLToAdd = new GroupLeader
+                    {
+                        UserId = user.Id,
+                        GroupId = groupId
+                    };
+
+                    _db.GroupLeaders.Add(GLToAdd);
+                    _db.SaveChanges();
+
                     await _userManager.AddToRoleAsync(user, "Group Leader");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -416,7 +440,8 @@ namespace NewSwift.Controllers
                 {
                     var repToAdd = new SalesRep
                     {
-                        UserId = user.Id
+                        UserId = user.Id,
+                        Name = obj.FirstName + " " + obj.LastName
                     };
 
                     _db.SalesReps.Add(repToAdd);

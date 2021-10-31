@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Hibernate.Migrations
 {
-    public partial class dbconfig : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -202,6 +202,66 @@ namespace Hibernate.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "GroupLeaders",
+                columns: table => new
+                {
+                    GroupLeaderId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupLeaders", x => x.GroupLeaderId);
+                    table.ForeignKey(
+                        name: "FK_GroupLeaders_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Participants",
+                columns: table => new
+                {
+                    ParticipantId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Participants", x => x.ParticipantId);
+                    table.ForeignKey(
+                        name: "FK_Participants_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Supporters",
+                columns: table => new
+                {
+                    SupporterID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParticipantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Supporters", x => x.SupporterID);
+                    table.ForeignKey(
+                        name: "FK_Supporters_Participants_ParticipantId",
+                        column: x => x.ParticipantId,
+                        principalTable: "Participants",
+                        principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -242,14 +302,29 @@ namespace Hibernate.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GroupLeaders_GroupId",
+                table: "GroupLeaders",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Groups_SalesRepId",
                 table: "Groups",
                 column: "SalesRepId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Participants_GroupId",
+                table: "Participants",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SalesReps_UserId",
                 table: "SalesReps",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Supporters_ParticipantId",
+                table: "Supporters",
+                column: "ParticipantId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -270,10 +345,19 @@ namespace Hibernate.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "GroupLeaders");
+
+            migrationBuilder.DropTable(
+                name: "Supporters");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Participants");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "SalesReps");

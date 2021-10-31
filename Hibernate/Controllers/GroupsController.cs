@@ -48,10 +48,35 @@ namespace Hibernate.Controllers
         {
             return View(await _context.Groups.ToListAsync());
         }
-        public async Task<IActionResult> AdminIndex()
+        
+        
+        public IActionResult AdminIndex()
         {
-            return View(await _context.Groups.ToListAsync());
+            var userList = _context.ApplicationUser.ToList();
+
+            var gList = _context.Groups.ToList();
+
+            var sList = _context.SalesReps.ToList();
+
+           // var userId = _context.SalesReps.Where(i => i.UserId == id).Select(i => i.SalesRepId).SingleOrDefault();
+           foreach(var item in gList)
+            {
+                //needs to be adjusted. Probably make name a column, instead of NotMapped
+                item.SalesRepName = sList.Where(i => i.SalesRepId == item.SalesRepId).Select(i => i.Name).SingleOrDefault();
+
+                if (item.SalesRepName == null)
+                {
+                    item.SalesRepName = "None";
+                }
+               
+            }
+
+            return View(gList);
+
+
         }
+
+
 
         // GET: Groups/Details/5
         public async Task<IActionResult> Details(int? id)

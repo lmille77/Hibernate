@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211011230453_Sample")]
-    partial class Sample
+    [Migration("20211024222127_removeGroup")]
+    partial class removeGroup
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,6 +51,46 @@ namespace Hibernate.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("Hibernate.Models.GroupLeader", b =>
+                {
+                    b.Property<int>("GroupLeaderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GroupLeaderId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupLeaders");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Participant", b =>
+                {
+                    b.Property<int>("ParticipantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ParticipantId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Participants");
+                });
+
             modelBuilder.Entity("Hibernate.Models.SalesRep", b =>
                 {
                     b.Property<int>("SalesRepId")
@@ -66,6 +106,26 @@ namespace Hibernate.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SalesReps");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Supporter", b =>
+                {
+                    b.Property<int>("SupporterID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SupporterID");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.ToTable("Supporters");
                 });
 
             modelBuilder.Entity("Hibernate.Models.ViewModels.ApplicationUser", b =>
@@ -137,9 +197,6 @@ namespace Hibernate.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("groupName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("isApproved")
                         .HasColumnType("bit");
@@ -299,11 +356,42 @@ namespace Hibernate.Migrations
                     b.Navigation("SalesRep");
                 });
 
+            modelBuilder.Entity("Hibernate.Models.GroupLeader", b =>
+                {
+                    b.HasOne("Hibernate.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Participant", b =>
+                {
+                    b.HasOne("Hibernate.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("Hibernate.Models.SalesRep", b =>
                 {
                     b.HasOne("Hibernate.Models.ViewModels.ApplicationUser", null)
                         .WithMany("SalesReps")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Supporter", b =>
+                {
+                    b.HasOne("Hibernate.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantId");
+
+                    b.Navigation("Participant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

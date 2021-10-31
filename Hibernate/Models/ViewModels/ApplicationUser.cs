@@ -36,6 +36,6 @@ namespace Hibernate.Models.ViewModels
 
         [ForeignKey("UserId")]
         public virtual ICollection<SalesRep> SalesReps { get; set; }
-        public string groupName { get; set; }
+        //public string groupName { get; set; }
     }
 }
