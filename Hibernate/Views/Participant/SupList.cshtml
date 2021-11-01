@@ -21,8 +21,8 @@
                 <th data-field="lastName" data-sortable="true">
                     Last Name
                 </th>
-                <th>
-                    Address
+                <th data-field="AmountRaised" data-sortable="true">
+                    Amount Raised
                 </th>
             </tr>
 
@@ -34,11 +34,15 @@
                     <td>
                         @item.FirstName
                     </td>
-                    <td>
+                    
                         @item.LastName
                     </td>
+<td>
+                        @item.AmountRaised
                     <td>
-                        @item.Address
+
+                    <td>
+                        @item.item
                     </td>
                 </tr>
 
