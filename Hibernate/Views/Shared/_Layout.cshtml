@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - Hibernate</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -27,18 +27,18 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid w-75">
         <main role="main" class="pb-3">
             <partial name="_Notifications" />
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-white bg-info border-white">
+    <!--<footer class="border-top footer text-white bg-info border-white">
         <div class="container">
-            &copy; 2021 - Hibernate<!--<a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> -->
-        </div>
-    </footer>
+            &copy; 2021 - Hibernate--><!--<a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> -->
+        <!--</div>
+    </footer>-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
