@@ -2,10 +2,6 @@
 @{
     ViewData["Title"] = "Admin Page";
 }
-
-
-
-
 <html>
 <head>
 
@@ -16,15 +12,15 @@
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
                 ['Sales during the week', 'Sales per thousand made every day of the week'],
-                ['Monday', 11],
-                ['Tuesday', 14],
-                ['Wednesday', 13],
-                ['Thursday', 16],
-                ['Friday', 20]
+                ['Mathew', 11],
+                ['Shawn', 14],
+                ['Johnathan', 7],
+                ['Henry', 32],
+                ['Destiny', 25]
             ]);
 
             var options = {
-                title: 'Weekly sales',
+                title: 'Top participants',
                 is3D: true,
             };
 
@@ -40,9 +36,9 @@
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Year', 'Assets', 'Liabilities'],
-                ['2004', 1000, 400],
-                ['2005', 1170, 460],
+                ['Year', 'Pillow', 'Bed Sheet'],
+                ['2004', 100, 400],
+                ['2005', 117, 460],
                 ['2006', 660, 1120],
                 ['2007', 1030, 540]
             ]);
@@ -59,10 +55,44 @@
         }
     </script>
 
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords"
+          content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, monster admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, " />
+    <meta name="description"
+          content="Monster is powerful and clean admin dashboard template, inpired from Google's Material Design" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Monster Template by WrapPixel</title>
+    <link rel="canonical"
+          href="https://www.wrappixel.com/templates/monsteradmin/" />
+    <!-- Favicon icon -->
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="../../assets/images/favicon.png" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet"
+          href="../../assets/extra-libs/taskboard/css/lobilist.css" />
+    <link rel="stylesheet"
+          href="../../assets/extra-libs/taskboard/css/jquery-ui.min.css" />
+    <link rel="stylesheet"
+          type="text/css"
+          href="../../assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+    <!-- Custom CSS -->
+    <link href="../../dist/css/style.min.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
 <body>
     <br />
-    <h2 class="text-center" style="margin-left:50px">Admin Overview</h2>
+    <h2 class="text-center">Admin Overview</h2>
     <br />
     <div class="sidebar-container border-info">
         <div>
@@ -82,7 +112,7 @@
             </li>
             <li>
                 <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
-                    Pending Approvals
+                    Pending Approval
                 </a>
             </li>
             <li>
@@ -104,8 +134,8 @@
     <!-- Container fluid  -->
     <!-- ============================================================== -->
     
-    <div style="margin-left: 150px; border: 1px solid; border-color: lightgray;">
-        <div style="margin-left: 50px; margin-right:50px;margin-top:50px;margin-bottom:50px">
+    <div>
+        
             <div class="row">
                 <!-- Column -->
                 <div class="col-md-6 col-lg-3 col-xlg-3">
@@ -185,81 +215,81 @@
 
                             </form>
                             @* <div class="steamline mt-4">
-                                <div class="sl-item">
-                                    <div class="sl-left bg-success">
-                                        <i class="ti-user"></i>
+                            <div class="sl-item">
+                                <div class="sl-left bg-success">
+                                    <i class="ti-user"></i>
+                                </div>
+                                <div class="sl-right">
+                                    <div class="font-weight-medium">
+                                        Meeting today <span class="sl-date"> 5pm</span>
                                     </div>
-                                    <div class="sl-right">
-                                        <div class="font-weight-medium">
-                                            Meeting today <span class="sl-date"> 5pm</span>
-                                        </div>
-                                        <div class="desc">Check Sales</div>
+                                    <div class="desc">Check Sales</div>
+                                </div>
+                            </div>
+                            <div class="sl-item">
+                                <div class="sl-left bg-info">
+                                    <i class="fa fa-image"></i>
+                                </div>
+                                <div class="sl-right">
+                                    <div class="font-weight-medium">
+                                        - Send documents to Clark
+                                    </div>
+                                    <div class="desc">Tell Clark about the meeting</div>
+                                </div>
+                            </div>
+                            <div class="sl-item">
+                                <div class="sl-left">
+                                    <img class="rounded-circle"
+                                         alt="user"
+                                         src="../../assets/images/users/1.jpg" />
+                                </div>
+                                <div class="sl-right">
+                                    <div>
+                                        <a href="#">Gohn Doe</a>
+                                        <span class="sl-date">5 minutes ago</span>
+                                    </div>
+                                    <div class="desc">Call today with John Doe</div>
+                                </div>
+                            </div>
+                            <div class="sl-item">
+                                <div class="sl-left">
+                                    <img class="rounded-circle"
+                                         alt="user"
+                                         src="../../assets/images/users/2.jpg" />
+                                </div>
+                                <div class="sl-right">
+                                    <div class="font-weight-medium">
+                                        Go to the Doctor
+                                        <span class="sl-date">5 minutes ago</span>
+                                    </div>
+                                    <div class="desc">- Make phone calls to solve customers delivery issues</div>
+                                </div>
+                            </div>
+                            <div class="sl-item">
+                                <div class="sl-left">
+                                    <img class="rounded-circle"
+                                         alt="user"
+                                         src="../../assets/images/users/3.jpg" />
+                                </div>
+                                <div class="sl-right">
+                                    <div>
+                                        <a href="#">Tiger Sroff</a>
+                                        <span class="sl-date">5 minutes ago</span>
+                                    </div>
+                                    <div class="desc">
+                                        - Approve meeting with Tiger <br /><a href="javascript:void(0)"
+                                                                              class="
+                              btn
+                              mt-2
+                              me-1
+                              btn-rounded btn-outline-success
+                            ">Approve</a>
+                                        <a href="javascript:void(0)"
+                                           class="btn mt-2 btn-rounded btn-outline-danger">Refuse</a>
                                     </div>
                                 </div>
-                                <div class="sl-item">
-                                    <div class="sl-left bg-info">
-                                        <i class="fa fa-image"></i>
-                                    </div>
-                                    <div class="sl-right">
-                                        <div class="font-weight-medium">
-                                            - Send documents to Clark
-                                        </div>
-                                        <div class="desc">Tell Clark about the meeting</div>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left">
-                                        <img class="rounded-circle"
-                                             alt="user"
-                                             src="../../assets/images/users/1.jpg" />
-                                    </div>
-                                    <div class="sl-right">
-                                        <div>
-                                            <a href="#">Gohn Doe</a>
-                                            <span class="sl-date">5 minutes ago</span>
-                                        </div>
-                                        <div class="desc">Call today with John Doe</div>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left">
-                                        <img class="rounded-circle"
-                                             alt="user"
-                                             src="../../assets/images/users/2.jpg" />
-                                    </div>
-                                    <div class="sl-right">
-                                        <div class="font-weight-medium">
-                                            Go to the Doctor
-                                            <span class="sl-date">5 minutes ago</span>
-                                        </div>
-                                        <div class="desc">- Make phone calls to solve customers delivery issues</div>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left">
-                                        <img class="rounded-circle"
-                                             alt="user"
-                                             src="../../assets/images/users/3.jpg" />
-                                    </div>
-                                    <div class="sl-right">
-                                        <div>
-                                            <a href="#">Tiger Sroff</a>
-                                            <span class="sl-date">5 minutes ago</span>
-                                        </div>
-                                        <div class="desc">
-                                            - Approve meeting with Tiger <br /><a href="javascript:void(0)"
-                                                                                  class="
-                                  btn
-                                  mt-2
-                                  me-1
-                                  btn-rounded btn-outline-success
-                                ">Approve</a>
-                                            <a href="javascript:void(0)"
-                                               class="btn mt-2 btn-rounded btn-outline-danger">Refuse</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> *@
+                            </div>
+                        </div> *@
                         </div>
                     </div>
                 </div>
@@ -320,19 +350,19 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-center">1</td>
-                                        <td class="fw-normal text-muted">Elite admin</td>
+                                        <td class="fw-normal text-muted">Mathew Rigdon</td>
                                         <td><span class="badge bg-success py-1">SALE</span></td>
                                         <td class="fw-normal text-muted">January 18, 2021</td>
                                         <td>
                                             <span class="text-success">
-                                                $24 <i class="fas fa-caret-up"></i>
+                                                $2400 <i class="fas fa-caret-up"></i>
                                             </span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="text-center">2</td>
                                         <td class="fw-normal text-muted">
-                                            Real Homes WP Theme
+                                            Shawn Ridley
                                         </td>
                                         <td>
                                             <span class="badge bg-info py-1">EXTENDED</span>
@@ -346,7 +376,7 @@
                                     </tr>
                                     <tr>
                                         <td class="text-center">3</td>
-                                        <td class="fw-normal text-muted">Ample Admin</td>
+                                        <td class="fw-normal text-muted">Jonathan Bradley</td>
                                         <td>
                                             <span class="badge bg-info py-1">EXTENDED</span>
                                         </td>
@@ -360,13 +390,13 @@
                                     <tr>
                                         <td class="text-center">4</td>
                                         <td class="fw-normal text-muted">
-                                            Medical Pro WP Theme
+                                            Henry Mass
                                         </td>
                                         <td><span class="badge bg-danger py-1">TAX</span></td>
                                         <td class="fw-normal text-muted">January 20, 2021</td>
                                         <td>
                                             <span class="text-danger">
-                                                -$24 <i class="fas fa-caret-down"></i>
+                                                $240 <i class="fas fa-caret-down"></i>
                                             </span>
                                         </td>
                                     </tr>
@@ -412,7 +442,6 @@
             </div>
             <!-- Row -->
         </div>
-    </div>
     <br />
  
 
@@ -426,99 +455,4 @@
 <!-- ============================================================== -->
 
 
-<style>
-    .sidebar-container {
-        position: absolute;
-        width: 250px;
-        height: 95%;
-        left: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        background: #36454F;
-        color: #fff;
-        top: 57px;
-        border-style: solid;
-    }
 
-    .content-container {
-        padding-top: 20px;
-    }
-
-    .sidebar-logo {
-        padding: 10px 15px 10px 30px;
-        font-size: 20px;
-        background-color: #2574A9;
-    }
-
-    .sidebar-navigation {
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-        position: relative;
-    }
-
-        .sidebar-navigation li {
-            background-color: transparent;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            line-height: 20px;
-        }
-
-            .sidebar-navigation li a {
-                padding: 10px 15px 10px 30px;
-                display: block;
-                color: #fff;
-            }
-
-            .sidebar-navigation li .fa {
-                margin-right: 10px;
-            }
-
-            .sidebar-navigation li a:active,
-            .sidebar-navigation li a:hover,
-            .sidebar-navigation li a:focus {
-                text-decoration: none;
-                outline: none;
-            }
-
-            .sidebar-navigation li::before {
-                background-color: #2574A9;
-                position: absolute;
-                content: '';
-                height: 100%;
-                left: 0;
-                top: 0;
-                -webkit-transition: width 0.2s ease-in;
-                transition: width 0.2s ease-in;
-                width: 3px;
-                z-index: -1;
-            }
-
-            .sidebar-navigation li:hover::before {
-                width: 100%;
-            }
-
-        .sidebar-navigation .header {
-            font-size: 12px;
-            text-transform: uppercase;
-            background-color: #151515;
-            padding: 10px 15px 10px 30px;
-        }
-
-            .sidebar-navigation .header::before {
-                background-color: transparent;
-            }
-
-    .content-container {
-        padding-left: 220px;
-    }
-
-    .container-1 {
-        display: flex;
-    }
-
-    .segment {
-        width: 50%
-    }
-</style>

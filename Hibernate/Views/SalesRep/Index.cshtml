@@ -3,127 +3,288 @@
     ViewData["Title"] = "Sales Rep Page";
 }
 
+<html>
+<head>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Year', 'Sales',],
+                ['2013', 1000],
+                ['2014', 1170],
+                ['2015', 660],
+                ['2016', 1030]
+            ]);
+
+            var options = {
+                title: 'Company Performance',
+                hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
+                vAxis: { minValue: 0 }
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var oldData = google.visualization.arrayToDataTable([
+                ['Name', 'Net Gain'],
+                ['2015', 2410],
+                ['2016', 3230],
+                ['2017', 4010],
+                ['2018', 5231]
+            ]);
+
+            var newData = google.visualization.arrayToDataTable([
+                ['Name', 'Popularity'],
+                ['Cesar', 370],
+                ['Rachel', 600],
+                ['Patrick', 700],
+                ['Eric', 1500]
+            ]);
+
+            var colChartBefore = new google.visualization.ColumnChart(document.getElementById('colchart_before'));
+
+
+            var options = { legend: { position: 'top' } };
+
+            colChartBefore.draw(oldData, options);
+            colChartAfter.draw(newData, options);
+
+            var diffData = colChartDiff.computeDiff(oldData, newData);
+            colChartDiff.draw(diffData, options);
+            barChartDiff.draw(diffData, options);
+        }
+    </script>
+
+
+</head>
+<body>
+
+
+    <br />
+    <h2 class="text-center" style="margin-left:50px">Sales Rep Overview</h2>
+    <br />
+
+    <div class="container-fluid" style="margin-left: 100px; ">
+        <div style="margin-left: 50px; margin-right:50px;margin-top:50px;margin-bottom:50px">
+            <center>
+                <div class="row">
+                    <!--First Button-->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary">First</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(88px, 42px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                    <!--Second Button-->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary">Second</button>
+                        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(110px, 42px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                    <!--Third Button-->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success">Third</button>
+                        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(89px, 42px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                    <!--Fourth Button-->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info">Fourth</button>
+                        <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(59px, 42px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                    <!--Fifth Button-->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-warning">Fifth</button>
+                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                    <!--Sixth Button-->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger">Sixth</button>
+                        <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+            </center>
+
+            <div class="sidebar-container border-info">
+                <div>
+                    <br />
+                    <div class="text-center">Quick Actions</div>
+                    <br />
+                </div>
+
+                <ul class="sidebar-navigation">
+
+                    <li>
+                        <a asp-controller="Index" asp-action="SalesRep" class="btn btn-info btn-outline-light">Dashboard</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Groups" asp-action="SRIndex" class="btn btn-dark btn-outline-info">Groups List</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-1">
+            <div class="segment">
+                <!--Chart 1-->
+                <div id="chart_div" style="width: 100%; height: 300px; align-content:center"></div>
+            </div>
+
+            <div class="segment">
+                <span id='colchart_before' style='width: 450px; height: 300px; display: inline-block'></span>
+                @*<span id='colchart_after' style='width: 450px; height: 300px; display: inline-block'></span>
+                    <span id='colchart_diff' style='width: 450px; height: 300px; display: inline-block'></span>
+                    <span id='barchart_diff' style='width: 450px; height: 300px; display: inline-block'></span>*@
+                <!--End of Charts-->
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+
+            <div>
+
+                <form asp-controller="Money" asp-action="ChartOfAccounts" method="post">
+                    <div>&nbsp;&nbsp;</div>
+                    <div>&nbsp;&nbsp;</div>
+                    <p>
+                        <label>$</label>
+                        <input type="text" name="BalanceSearch1" value="@ViewBag.result" />
+                        <label> - $</label>
+                        <input type="text" name="BalanceSearch2" value="@ViewBag.result" />
+                        &nbsp;&nbsp;
+                        <input type="date" name="DateSearch1" value="@ViewBag.result" />
+                        <label> - </label>
+                        <input type="date" name="DateSearch2" value="@ViewBag.result" />
+                        &nbsp;&nbsp;
+                        <input type="submit" value="Filter" data-toggle="tooltip" data-placement="bottom" title="Filter the Chart of Accounts Data
+                       with a Date Range or Balance Search" />
+                    </p>
+                </form>
+            </div>
+            <div>&nbsp;&nbsp;</div>
+            <div>
+                <div>&nbsp;&nbsp;</div>
+                <form asp-controller="Money" asp-action="ChartOfAccounts" method="get">
+                    <div>&nbsp;&nbsp;</div>
+                    <p>
+                        <input type="submit" value="Reset" data-toggle="tooltip" data-placement="bottom" title="Reset the Filtered Data">
+                    </p>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="container-fluid" style="width: 1000px; margin-left: 75px">
+            <table class="table" id="table"
+                   data-toggle="table"
+                   data-search="true"
+                   data-filter-control="true">
+                <thead>
+                    <tr>
+                        <th data-field="accountNumber" data-sortable="true">
+                            Contact Name
+                        </th>
+                        <th data-field="accountName" data-sortable="true">
+                            Account Name
+                        </th>
+                        <th>
+                            Donation Name
+                        </th>
+                        <th data-field="category" data-sortable="true">
+                            Fiscal year
+                        </th>
+                        <th data-field="subCategory" data-sortable="true">
+                            Amount
+                        </th>
 
 
 
 
 
+                    </tr>
+                </thead>
 
-<br />
-<h2 class="text-center" style="margin-left:50px">Sales Rep Overview</h2>
-<br />
 
-<div class="sidebar-container border-info">
-    <div>
-        <br />
-        <div class="text-center">Quick Actions</div>
-        <br />
+            </table>
+        </div>
+
+
     </div>
 
-    <ul class="sidebar-navigation">
 
-        <li>
-            <a asp-controller="Index" asp-action="SalesRep" class="btn btn-info btn-outline-light">Dashboard</a>
-        </li>
-        <li>
-            <a asp-controller="Groups" asp-action="SRIndex" class="btn btn-dark btn-outline-info">Groups List</a>
-        </li>
-    </ul>
-</div>
 
-<style>
-    .sidebar-container {
-        position: absolute;
-        width: 250px;
-        height: 90%;
-        left: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        background: #36454F;
-        color: #fff;
-        top: 57px;
-        border-style: solid;
-    }
+</body>
+</html>
 
-    .content-container {
-        padding-top: 20px;
-    }
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 
-    .sidebar-logo {
-        padding: 10px 15px 10px 30px;
-        font-size: 20px;
-        background-color: #2574A9;
-    }
-
-    .sidebar-navigation {
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-        position: relative;
-    }
-
-        .sidebar-navigation li {
-            background-color: transparent;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            line-height: 20px;
-        }
-
-            .sidebar-navigation li a {
-                padding: 10px 15px 10px 30px;
-                display: block;
-                color: #fff;
-            }
-
-            .sidebar-navigation li .fa {
-                margin-right: 10px;
-            }
-
-            .sidebar-navigation li a:active,
-            .sidebar-navigation li a:hover,
-            .sidebar-navigation li a:focus {
-                text-decoration: none;
-                outline: none;
-            }
-
-            .sidebar-navigation li::before {
-                background-color: #2574A9;
-                position: absolute;
-                content: '';
-                height: 100%;
-                left: 0;
-                top: 0;
-                -webkit-transition: width 0.2s ease-in;
-                transition: width 0.2s ease-in;
-                width: 3px;
-                z-index: -1;
-            }
-
-            .sidebar-navigation li:hover::before {
-                width: 100%;
-            }
-
-        .sidebar-navigation .header {
-            font-size: 12px;
-            text-transform: uppercase;
-            background-color: #151515;
-            padding: 10px 15px 10px 30px;
-        }
-
-            .sidebar-navigation .header::before {
-                background-color: transparent;
-            }
-
-    .content-container {
-        padding-left: 220px;
-    }
-
-    .container-1 {
-        display: flex;
-    }
-
-    .segment {
-        width: 50%
-    }
-</style>
+<link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/filter-control/utils.min.js"></script>

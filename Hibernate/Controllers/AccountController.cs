@@ -111,6 +111,7 @@ namespace Hibernate.Controllers
                     var curr_user = await _userManager.FindByNameAsync(obj.Email);
                     var admin_role_list = await _userManager.GetUsersInRoleAsync("Admin");
                     var sr_role_list = await _userManager.GetUsersInRoleAsync("Sales Rep");
+                    var gl_role_list = await _userManager.GetUsersInRoleAsync("Group Leader");
                     var participant_role_list = await _userManager.GetUsersInRoleAsync("Participant");
 
                     if (curr_user.isApproved == true && admin_role_list.Contains(curr_user))
@@ -122,6 +123,10 @@ namespace Hibernate.Controllers
                     {
                         
                         return RedirectToAction("Index", "SalesRep");
+                    }
+                    else if (curr_user.isApproved == true && gl_role_list.Contains(curr_user))
+                    {
+                        return RedirectToAction("Index", "GroupLeader");
                     }
                     else if (curr_user.isApproved == true && participant_role_list.Contains(curr_user))
                     {
@@ -196,7 +201,7 @@ namespace Hibernate.Controllers
                     Email = obj.Email,
                     isApproved = false,
                     PasswordDate = DateTime.Now,
-                    groupName = obj.GroupSelected
+                    //groupName = obj.GroupSelected
                     
                     
                 };

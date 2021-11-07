@@ -20,5 +20,17 @@ namespace Hibernate.Data
 
         public DbSet<Group> Groups { get; set; }
         public DbSet<SalesRep> SalesReps { get; set; }
+
+        public DbSet<GroupLeader> GroupLeaders { get; set; }
+
+        public DbSet<Participant> Participants { get; set; }
+
+        public DbSet<Supporter> Supporters { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Item> Items { get; set; }
+
+        public DbSet<Order_Item> Order_Items { get; set; }
     }
 }

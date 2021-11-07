@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hibernate.Models
 {
-    public class SalesRep
+    public class Item
     {
         [Key]
-        public int SalesRepId { get; set; }
+        public int ItemId { get; set; }
 
-        public string UserId { get; set; }
-
-       [NotMapped]
         public string Name { get; set; }
-        //public ICollection<Group> Groups { get; set; }
+
+        [DataType(DataType.Currency)]
+        public double Price { get; set; }
 
     }
 }

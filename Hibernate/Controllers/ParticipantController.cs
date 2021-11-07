@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Hibernate.Controllers
@@ -212,7 +213,7 @@ namespace Hibernate.Controllers
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
 
                     TempData[SD.Success] = "Account Created";
-                    return RedirectToAction("Index", "Participant");
+                    return RedirectToAction("list", "Participant");
 
                 }
                 else
@@ -225,7 +226,30 @@ namespace Hibernate.Controllers
             return View(obj);
         }
 
+        public IActionResult SupList()
+        {
+          
 
+            var uId = _userManager.GetUserId(User);
+
+            int pId = _db.Participants.Where(i => i.UserId == uId).Select(i => i.ParticipantId).SingleOrDefault();
+
+            var pList = _db.Supporters.Where(i => i.ParticipantId == pId).ToList();
+
+            
+
+
+            return View(pList);
+        }
+
+        public IActionResult participant()
+        {
+            var participantList = _db.Participants.ToList();
+
+            var OrderList = _db.Order_Items.ToList();
+
+            return View();
+      }
 
     }
 }
