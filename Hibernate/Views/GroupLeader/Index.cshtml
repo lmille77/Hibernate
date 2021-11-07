@@ -9,7 +9,6 @@
 
 
 
-
 <div class="text-center">
     <h1>Group Leader Dashboard</h1>
 </div>
@@ -21,10 +20,18 @@
         <br />
     </div>
 
-    <ul class="sidebar-navigation">      
+    <ul class="sidebar-navigation">
 
         <li>
-            <a asp-controller="Participant" asp-action="list" class="btn btn-dark btn-outline-info">Participants List</a>
+            <a asp-controller="GroupLeader" asp-action="Index" class="btn btn-info btn-outline-light">Dashboard</a>
+        </li>
+
+        <li>
+            <a asp-controller="Participant" asp-action="List" class="btn btn-dark btn-outline-info">Participant List</a>
+        </li>
+
+        <li>
+            <a asp-controller="Participant" asp-action="Pending" class="btn btn-dark btn-outline-info">Pending Users</a>
         </li>
     </ul>
 </div>

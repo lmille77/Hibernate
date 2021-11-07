@@ -14,12 +14,16 @@
     </div>
 
     <ul class="sidebar-navigation">
-
+        
         <li>
-            <a asp-controller="Participant" asp-action="List" class="btn btn-info btn-outline-light">Supporters List</a>
+            <a asp-controller="GroupLeader" asp-action="Index" class="btn btn-dark btn-outline-info">Dashboard</a>
+        </li>
+        
+        <li>
+            <a asp-controller="Participant" asp-action="List" class="btn btn-info btn-outline-light">Participant List</a>
         </li>
         <li>
-            <a asp-controller="Participant" asp-action="List" class="btn btn-info btn-outline-light">Pending Users</a>
+            <a asp-controller="Participant" asp-action="Pending" class="btn btn-dark btn-outline-info">Pending Users</a>
         </li>
     </ul>
 </div>

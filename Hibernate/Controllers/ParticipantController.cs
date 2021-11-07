@@ -71,12 +71,14 @@ namespace Hibernate.Controllers
             {
                 foreach (var id in pList)
                 {
-                    if (id == item.Id)
+                    if (id == item.Id && item.isApproved == true)
                     {
                         users.Add(item);
                     }
                 }
             }
+
+          
 
             return View(users);
         }
@@ -271,7 +273,86 @@ namespace Hibernate.Controllers
             var OrderList = _db.Order_Items.ToList();
 
             return View();
-      }
+        }
 
+    
+
+        public async Task<IActionResult> pending()
+        {
+            var part_list = _db.Participants.ToList();
+            var all_parts = await _userManager.GetUsersInRoleAsync("Participant");
+            List<ApplicationUser> unapproved_list = new List<ApplicationUser>();
+
+            var id = _userManager.GetUserId(User);
+
+            var gId = _db.GroupLeaders.Where(u => u.UserId == id).Select(e => e.GroupId).FirstOrDefault();
+
+           
+            foreach (var user in all_parts)
+            {
+                if(user.isApproved != true)
+                {
+                    user.GroupId = _db.Participants.Where(u => u.UserId == user.Id).Select(e => e.GroupId).FirstOrDefault();
+                    user.GroupName = _db.Groups.Where(u => u.GroupId == user.GroupId).Select(e => e.Name).FirstOrDefault();
+                }
+              
+
+            }
+
+
+            foreach (var user in all_parts)
+            {
+                if (user.isApproved == false && user.GroupId == gId)
+                {
+                    unapproved_list.Add(user);
+                }
+            }
+
+
+           
+            return View(unapproved_list);
+        }
+
+
+        [HttpPost]
+        public IActionResult Delete(string userId)
+        {
+            var objFromDb = _db.ApplicationUser.FirstOrDefault(u => u.Id == userId);
+            if (objFromDb == null)
+            {
+                return NotFound();
+            }
+            _db.ApplicationUser.Remove(objFromDb);
+            _db.SaveChanges();
+            TempData[SD.Success] = "User rejected succesfully";
+            return RedirectToAction("pending", "Participant");
+        }
+
+
+        [HttpPost]
+        public IActionResult Approve(string userId)
+        {
+            var objFromdb = _db.ApplicationUser.FirstOrDefault(u => u.Id == userId);
+            if (objFromdb == null)
+            {
+                return NotFound();
+            }
+
+            if (objFromdb.isApproved == false)
+            {
+                //sends an email to admin requesting approval for new user
+                var email = objFromdb.Email;
+                var subject = "Accepted";
+                var body = "<a href='https://localhost:44316/Account/Login'>Click here to sign in </a>";
+                var mailHelper = new MailHelper(_configuration);
+                mailHelper.Send(_configuration["Gmail:Username"], email, subject, body);
+                objFromdb.isApproved = true;
+                TempData[SD.Success] = "User approved successfully.";
+            }
+
+
+            _db.SaveChanges();
+            return RedirectToAction("pending", "Participant");
+        }
     }
 }
