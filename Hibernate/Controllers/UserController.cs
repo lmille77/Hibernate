@@ -84,6 +84,8 @@ namespace NewSwift.Controllers
         }
 
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsync(ApplicationUser user)
@@ -147,6 +149,9 @@ namespace NewSwift.Controllers
             return View(user);
         }
 
+
+
+
         [HttpPost]
         public IActionResult LockUnlock(string userId)
         {
@@ -173,6 +178,9 @@ namespace NewSwift.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
+
         [HttpPost]
         public IActionResult Delete(string userId)
         {
@@ -187,6 +195,8 @@ namespace NewSwift.Controllers
             TempData[SD.Success] = "User deleted succesfully";
             return RedirectToAction(nameof(Index));
         }
+
+
 
 
         [HttpGet]
@@ -207,6 +217,10 @@ namespace NewSwift.Controllers
             }
             return View();
         }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -286,6 +300,10 @@ namespace NewSwift.Controllers
             return View(obj);
         }
 
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> CreateGL()
         {
@@ -304,6 +322,10 @@ namespace NewSwift.Controllers
             }
             return View();
         }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -385,6 +407,11 @@ namespace NewSwift.Controllers
             }
             return View(obj);
         }
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> CreateSR()
         {
@@ -403,6 +430,10 @@ namespace NewSwift.Controllers
             }
             return View();
         }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

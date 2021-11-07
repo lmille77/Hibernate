@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.SecurityTokenService;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Hibernate.Models;
 
 namespace Hibernate.Controllers
 {
@@ -48,25 +51,34 @@ namespace Hibernate.Controllers
 
         public async Task<IActionResult> list()
         {
-            
-            var list = await _userManager.GetUsersInRoleAsync("Participant");
-            
-           
-            //foreach (var user in list)
+
+            var uId = _userManager.GetUserId(User);
+
+            int gId = _db.GroupLeaders.Where(u => u.UserId == uId).Select(i => i.GroupId).FirstOrDefault();
+
+            var pList = _db.Participants.Where(i => i.GroupId == gId).Select(i => i.UserId).ToList();
+
+            //if(pList == null)
             //{
-            //    //this will find if there are any roles in the userRole table
-            //    var role = userRole.FirstOrDefault(u => u.UserId == user.Id);
-            //    if (role == null)
-            //    {
-            //        user.Role = "None";
-            //    }
-            //    else
-            //    {
-            //        user.Role = roles.FirstOrDefault(u => u.Id == role.RoleId).Name;
-            //    }
+            //    return NotFound();
             //}
 
-            return View(list);
+            var userList = _db.ApplicationUser.ToList();
+
+            List<ApplicationUser> users = new List<ApplicationUser>();
+
+            foreach (var item in userList)
+            {
+                foreach (var id in pList)
+                {
+                    if (id == item.Id)
+                    {
+                        users.Add(item);
+                    }
+                }
+            }
+
+            return View(users);
         }
 
 
@@ -125,7 +137,7 @@ namespace Hibernate.Controllers
                 objFromDb.LastName = user.LastName;
                 _db.SaveChanges();
                 TempData[SD.Success] = "User has been edited successfully.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("list", "Participant");
             }
 
 
@@ -137,6 +149,10 @@ namespace Hibernate.Controllers
             return View(user);
         }
 
+
+
+
+
         [HttpGet]
         public IActionResult Upsert(string id)
         {
@@ -144,6 +160,10 @@ namespace Hibernate.Controllers
 
             return View();
         }
+
+
+
+
 
 
         [HttpPost]
@@ -154,7 +174,19 @@ namespace Hibernate.Controllers
             string _Firstname = obj.FirstName.ToLower();
             string _Lastname = obj.LastName.ToLower();
 
+            var groupList = _db.Groups.ToList();
+            //List<SelectListItem> groups = new List<SelectListItem>();
+            //foreach (var group in groupList)
+            //{
+            //    SelectListItem li = new SelectListItem
+            //    {
+            //        Value = group.Name,
+            //        Text = group.Name,
 
+            //    };
+            //    groups.Add(li);
+            //    ViewBag.Users = groups;
+            //}
 
             if (ModelState.IsValid)
             {
@@ -166,52 +198,40 @@ namespace Hibernate.Controllers
                     FirstName = obj.FirstName,
                     LastName = obj.LastName,
                     Email = obj.Email,
-                    isApproved = false,
-                    PasswordDate = DateTime.Now
+                    isApproved = true,
+                    PasswordDate = DateTime.Now,
+
                 };
-
-
+                var id = user.Id;
+                var uId = _userManager.GetUserId(User);
+                var groupId = _db.GroupLeaders.Where(u => u.UserId == uId).Select(u => u.GroupId).FirstOrDefault();
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
-
+                //var groupId = _db.Groups.Where(u => u.Name == obj.GroupSelected).Select(e => e.GroupId).FirstOrDefault();
 
                 if (result.Succeeded)
                 {
 
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Admin")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Admin");
-                    //}
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Sales Rep")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Sales Rep");
-                    //}
+                    var partToAdd = new Participant
+                    {
+                        UserId = user.Id,
+                        GroupId = groupId
+                    };
 
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Group Leader")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Group Leader");
-                    //}
-
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Participant")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Admin");
-                    //}
+                    _db.Participants.Add(partToAdd);
+                    _db.SaveChanges();
 
 
                     await _userManager.AddToRoleAsync(user, "Participant");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-
                     var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-
                     var Email = obj.Email;
                     var subject = "Account Confirmation";
                     var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
-
                     TempData[SD.Success] = "Account Created";
                     return RedirectToAction("list", "Participant");
 
@@ -221,10 +241,12 @@ namespace Hibernate.Controllers
                     ModelState.AddModelError("", "An account with the entered email already exists.");
                 }
 
-
             }
             return View(obj);
         }
+
+
+      
 
         public IActionResult SupList()
         {
