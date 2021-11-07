@@ -14,7 +14,7 @@
 
 <h2 class="text-center">Group List</h2>
 
-<br />
+
 <div class="sidebar-container border-info">
     <div>
         <br />
@@ -22,10 +22,7 @@
         <br />
     </div>
 
-    <ul class="sidebar-navigation">
-        @*<li>
-                <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
-            </li>*@
+    <ul class="sidebar-navigation">      
         <li>
             <a asp-controller="Admin" asp-action="Index" class="btn btn-dark btn-outline-info">
                 Dashboard
@@ -45,24 +42,15 @@
         <li>
             <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
         </li>
-        @*<li>
-                <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
-            </li>*@
     </ul>
 </div>
-<div class="p-4 border w-100">
-
-
-    <a class="btn btn-primary" asp-action="AdminCreate" asp-controller="Groups">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-        Create New
-    </a>
+<div class="p-4 border w-100">    
 
     <table class="table table-striped border" id="table"
            data-toggle="table"
            data-search="true"
            data-filter-control="true">
-        <thead class="thead-dark">
+        <thead class="table-secondary">
             <tr>
                 <th data-field="name" data-sortable="true">
                     @Html.DisplayNameFor(model => model.Name)
@@ -110,6 +98,12 @@
             }
         </tbody>
     </table>
-
-
 </div>
+<br />
+<div class="text-center">
+    <a class="btn btn-primary text-center" asp-action="AdminCreate" asp-controller="Groups">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        Create New Group
+    </a>
+</div>
+
