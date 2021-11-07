@@ -38,6 +38,8 @@ namespace Hibernate.Models.ViewModels
         public virtual ICollection<SalesRep> SalesReps { get; set; }
 
         [NotMapped]
-        public string Group { get; set; }
+        public string GroupName { get; set; }
+        [NotMapped]
+        public int GroupId { get; set; }
     }
 }

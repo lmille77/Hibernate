@@ -42,60 +42,72 @@
             <th>
                 Name
             </th>
-            @*<th>
-                    Group
-                </th>*@
+            <th>
+                Group
+            </th>
 
             <th></th>
         </tr>
         @foreach (var item in Model)
         {
-            @if (item.isApproved == false)
-            {
 
 
-                <tr>
+            <tr>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.FirstName  @item.LastName
+                </td>
+                @if (@item.GroupName != null)
+                {
                     <td>
-                        @item.Email
+                        @item.GroupName
                     </td>
+
+                }
+                else
+                {
                     <td>
-                        @item.FirstName  @item.LastName
+                        n/a
                     </td>
-                    @*<td>
-                            @item.groupName
-                        </td>*@
 
-                    <td>
-                        <div class="text-center">
-                            <form asp-action="Delete" asp-route-userId="@item.Id">
-
-                                @if (item.isApproved == false)
-                                {
-                                    //We want to show them the option to lock
-                                    <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-success text-white"
-                                            style="cursor:pointer">
-                                        <span>&nbsp; Accept &nbsp;</span>
-                                    </button>
-                                }
-                                else
-                                {
-                                    //We want to show them the option to unlock
-                                    <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-warning text-white"
-                                            style="cursor:pointer">
-                                        <span> Approved </span>
-                                    </button>
-                                }
+                }
 
 
-                                <button onclick="return confirm('Are you sure you want to reject this user?')"
-                                        class="btn btn-danger">
-                                    Reject
+
+
+                <td>
+                    <div class="text-center">
+                        <form asp-action="Delete" asp-route-userId="@item.Id">
+
+                            @if (item.isApproved == false)
+                            {
+                                //We want to show them the option to lock
+                                <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-success text-white"
+                                        style="cursor:pointer">
+                                    <span>&nbsp; Accept &nbsp;</span>
                                 </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            }
+                            }
+                            else
+                            {
+                                //We want to show them the option to unlock
+                                <button asp-action="Approve" asp-route-userId="@item.Id" class="btn btn-warning text-white"
+                                        style="cursor:pointer">
+                                    <span> Approved </span>
+                                </button>
+                            }
+
+
+                            <button onclick="return confirm('Are you sure you want to reject this user?')"
+                                    class="btn btn-danger">
+                                Reject
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+
         }
     </table>
 
