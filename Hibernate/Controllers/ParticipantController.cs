@@ -242,5 +242,14 @@ namespace Hibernate.Controllers
             return View(pList);
         }
 
+        public IActionResult participant()
+        {
+            var participantList = _db.Participants.ToList();
+
+            var OrderList = _db.Order_Items.ToList();
+
+            return View();
+      }
+
     }
 }
