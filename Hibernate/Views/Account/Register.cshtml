@@ -1,6 +1,6 @@
 ﻿@model Hibernate.Models.ViewModels.RegisterViewModel
 <br />
-<div style="border: 1px solid; border-color: lightgray; width: 550px; margin: 0 auto;">
+<div id="centerform0">
     <br />
     <div class="text-center">
         <img src="~/frontend/hibernate_img.jpg" alt=”Image” style="width:100px; height:100px">
@@ -12,63 +12,55 @@
         <div asp-validation-summary="All" class="text-danger"></div>
 
         <div class="form-group row">
-            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <div class="col-xs-2">
+            <div class="col-lg-6">
                 <input asp-for="FirstName" class="form-control" placeholder="First Name" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div>&nbsp;</div>
-            <div class="col-xs-2">
+            <div class="col-lg-6">
                 <input asp-for="LastName" class="form-control" placeholder="Last Name" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
         </div>
-        <br />
         <div class="form-group row">
             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <div class="col-md-8">
+            <div class="col-lg-12">
                 <input asp-for="Email" class="form-control" placeholder="Email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-        </div>     
-        
-        <br />
+        </div>  
         <div class="form-group row">
             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <div class="col-md-6">
+            <div class="col-lg-12">
                 <input asp-for="Password" class="form-control" placeholder="Password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
         </div>
-        <br />
         <div class="form-group row">
             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <div class="col-md-6">
+            <div class="col-lg-12">
                 <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
         </div>
-        <br />
         <div class="form-group row">
             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <select asp-for="GroupSelected" asp-items="@ViewBag.Users" class="form-control">
                     <option disabled selected>--Select a Group--</option>
                 </select>
             </div>
 
         </div>
-        <br />
 
 
         <div class="form-group">
-            <div class=" col-md-10 offset-md-2">
+            <div class="text-center">
                 <input type="submit" value="Register" class=" btn btn-success" />
             </div>
         </div>
-
+        <br />
         <p class="col-md-10 offset-md-2">
-            <a asp-action="Login">Already have an account? Click to login</a>
+            <a asp-action="Login">Already have an account? Click to login.</a>
         </p>
 
     </form>

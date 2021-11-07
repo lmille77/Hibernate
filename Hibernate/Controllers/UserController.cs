@@ -242,7 +242,6 @@ namespace NewSwift.Controllers
                     Email = obj.Email,
                     isApproved = true,
                     PasswordDate = DateTime.Now,
-                    //groupName= obj.GroupSelected
 
                 };
                 var id = user.Id;
