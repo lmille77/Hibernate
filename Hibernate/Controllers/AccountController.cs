@@ -176,6 +176,7 @@ namespace Hibernate.Controllers
             string _Lastname = obj.LastName.ToLower();
 
             var groupList = _db.Groups.ToList();
+
             List<SelectListItem> groups = new List<SelectListItem>();
             foreach (var group in groupList)
             {
@@ -200,9 +201,7 @@ namespace Hibernate.Controllers
                     LastName = obj.LastName,
                     Email = obj.Email,
                     isApproved = false,
-                    PasswordDate = DateTime.Now,
-                    //groupName = obj.GroupSelected
-                    
+                    PasswordDate = DateTime.Now,                    
                     
                 };
                 var id = user.Id;
@@ -214,7 +213,20 @@ namespace Hibernate.Controllers
 
                 if (result.Succeeded)
                 {
-
+                    Participant newParticipant = new Participant
+                    {
+                        UserId = user.Id
+                    };
+                    foreach (var group in groupList)
+                    {
+                        if(group.Name == obj.GroupSelected)
+                        {
+                            newParticipant.Group = group;
+                            newParticipant.GroupId = group.GroupId;
+                            break;
+                        }
+                    }
+                    
                     
                     await _userManager.AddToRoleAsync(user, "Participant");                  
 
@@ -225,9 +237,12 @@ namespace Hibernate.Controllers
 
                     var Email = obj.Email;
                     var subject = "Account Confirmation";
-                    var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
+                    var body = "Please confirm your account by clicking <a href=\"" + callbackurl + "\"> here.";
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
+
+                    _db.Participants.Add(newParticipant);
+                    _db.SaveChanges();
 
                     TempData[SD.Success] = "Account Created. Awaiting approval.";
                     return RedirectToAction("Login", "Account");
