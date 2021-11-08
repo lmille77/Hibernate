@@ -325,7 +325,7 @@ namespace Hibernate.Controllers
             _db.ApplicationUser.Remove(objFromDb);
             _db.SaveChanges();
             TempData[SD.Success] = "User rejected succesfully";
-            return RedirectToAction("pending", "Participant");
+            return RedirectToAction("list", "Participant");
         }
 
 

@@ -46,7 +46,21 @@ namespace Hibernate.Controllers
         // GET: Groups
         public async Task<IActionResult> SRIndex()
         {
-            return View(await _context.Groups.ToListAsync());
+            var id = _userManager.GetUserId(User);
+            var gList = _context.Groups.ToList();
+            var sId = _context.SalesReps.Where(u => u.UserId == id).Select(u => u.SalesRepId).FirstOrDefault();
+
+            List<Group> groups = new List<Group>();
+            
+            foreach(var item in gList)
+            {
+                if(item.SalesRepId == sId)
+                {
+                    groups.Add(item);
+                }
+            }
+            
+            return View(groups);
         }
         
         
