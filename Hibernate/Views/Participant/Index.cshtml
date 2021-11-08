@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hibernate.Models.ViewModels.ParticipantItem>
+﻿@model IEnumerable<Hibernate.Models.Supporter>
 @{
     ViewData["Title"] = "Participant Page";
 }
@@ -52,41 +52,45 @@
            data-filter-control="true">
         <thead>
             <tr>
-                <th a data-ng-class="btn-primary" data-field="firstName" data-sortable="true">
+                <th  data-field="firstName" data-sortable="true">
                     First Name
                 </th>
                 <th data-field="lastName" data-sortable="true">
                     Last Name
                 </th>
-                <th data-field="lastName" data-sortable="true">
-                    Amount raised
+                <th data-field="bedSheets" data-sortable="true">
+                    Bed Sheets
                 </th>
-                <th>
-                    Item
+                <th data-field="pillowCases" data-sortable="true">
+                    Pillow Cases
+                </th>
+                <th data-field="amountRaised" data-sortable="true">
+                    Amount Raised
                 </th>
             </tr>
 
         </thead>
         <tbody>
-            @*  @foreach (var item in Participant.)
-                    {
-                    <tr>
-                        <td>
-                            @item.FirstName
-                        </td>
-                        <td>
-                            @item.LastName
-                        </td>
-                        <td>
-                            @item.Address
-                        </td>
-                        <td>
-                            @item.Address
+          @foreach(var item in Model) 
+          { 
+            <tr>
+                <td>
+                    @item.FirstName
                 </td>
-                </tr>
-
-
-                }*@
+                <td>
+                    @item.LastName
+                </td>
+                <td>
+                    @item.BedSheets
+                </td>
+                <td>
+                    @item.PillowCases
+                </td>
+                <td>
+                    @item.Total
+                </td>
+            </tr>
+          }
         </tbody>
     </table>
 </div>

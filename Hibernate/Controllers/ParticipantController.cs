@@ -43,8 +43,61 @@ namespace Hibernate.Controllers
 
 
         public IActionResult Index()
-        {            
-            return View();
+        {
+            var sups = _db.Supporters.ToList();
+
+            var uId = _userManager.GetUserId(User);
+
+            var pId = _db.Participants.Where(u => u.UserId == uId).Select(u => u.ParticipantId).FirstOrDefault();
+
+            var orders = _db.Orders.ToList();
+
+            var orderItems = _db.Order_Items.ToList();
+
+
+            List<Supporter> supporters = new List<Supporter>();
+
+            foreach(var item in sups)
+            {
+                if(item.ParticipantId == pId)
+                {
+                    supporters.Add(item);
+                }
+            }
+            
+            foreach(var sup in supporters)
+            {
+                foreach(var item in orders)
+                {
+                    if(item.SupporterId == sup.SupporterId)
+                    {
+                        sup.Total += item.Total;
+                        sup.OrderId = item.OrderId;
+                    }
+                }
+            }
+
+            foreach(var sup in supporters)
+            {
+                foreach (var item in orderItems)
+                {
+                    if(sup.OrderId == item.OrderId)
+                    {
+                        if(item.ItemId == 1)
+                        {
+                            sup.BedSheets++;
+                        }
+
+                        if(item.ItemId == 2)
+                        {
+                            sup.PillowCases++;
+                        }
+                    }
+                }
+            }
+
+
+            return View(supporters);
         }
 
 

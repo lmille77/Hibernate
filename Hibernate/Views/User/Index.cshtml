@@ -2,10 +2,11 @@
 
 
 
-<!--<link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">-->
-@*<script src="https://code.jquery.com/jquery-3.6.0.js"></script>*@
-<!--<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>-->
+<link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/filter-control/utils.min.js"></script>*@
 
 <h2 class="text-center">User List</h2>
 
@@ -17,7 +18,7 @@
     </div>
 
     <ul class="sidebar-navigation">
-      
+
         <li>
             <a asp-controller="Admin" asp-action="Index" class="btn btn-dark btn-outline-info">
                 Dashboard
@@ -65,70 +66,70 @@
         <thead />
         @if (Model.Count() == 0)
         {
-           
+
         }
         else
         {
-          <tbody>
-            @foreach (var item in Model)
-            {
-                if (item.isApproved)
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @item.Email
-                        </td>
-                        <td>
-                            @item.FirstName  @item.LastName
-                        </td>
-                        <td>
-                            @item.Role
-                        </td>
-                        @*<td>
-                            @if (@item.groupName == null)
-                            {
-                                item.groupName = "n/a";
-                            }
-                            @item.groupName
-                        </td>*@
-                        <td>
-                            <div class="text-center">
-                                <form asp-action="Delete" asp-route-userId="@item.Id">
-                                    <a asp-action="Edit" asp-route-userId="@item.Id" class="btn btn-info text-white" style="cursor:pointer">
-                                        Edit
-                                    </a>
-                                    @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                    if (item.isApproved)
+                    {
+                        <tr>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                @item.FirstName  @item.LastName
+                            </td>
+                            <td>
+                                @item.Role
+                            </td>
+                            @*<td>
+                                    @if (@item.groupName == null)
                                     {
-                                        //We want to show them the option to lock
-                                        <button asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-success text-white"
-                                                style="cursor:pointer">
-                                            <span>&nbsp; Lock &nbsp;</span>
-                                        </button>
+                                        item.groupName = "n/a";
                                     }
-                                    else
-                                    {
-                                        //We want to show them the option to unlock
-                                        <button asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-warning text-white"
-                                                style="cursor:pointer">
-                                            <span> Unlock </span>
-                                        </button>
-                                    }
+                                    @item.groupName
+                                </td>*@
+                            <td>
+                                <div class="text-center">
+                                    <form asp-action="Delete" asp-route-userId="@item.Id">
+                                        <a asp-action="Edit" asp-route-userId="@item.Id" class="btn btn-info text-white" style="cursor:pointer">
+                                            Edit
+                                        </a>
+                                        @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                                        {
+                                            //We want to show them the option to lock
+                                            <button asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-success text-white"
+                                                    style="cursor:pointer">
+                                                <span>&nbsp; Lock &nbsp;</span>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            //We want to show them the option to unlock
+                                            <button asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-warning text-white"
+                                                    style="cursor:pointer">
+                                                <span> Unlock </span>
+                                            </button>
+                                        }
 
-                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this?')"
-                                            class="btn btn-danger">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this?')"
+                                                class="btn btn-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        
-        </tbody>
+
+            </tbody>
         }
     </table>
-    
+
 
 </div>
 <br />
