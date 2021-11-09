@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hibernate.Models.ViewModels.ApplicationUser>
+﻿@model IEnumerable<Hibernate.Models.Participant>
 @{
     ViewData["Title"] = "Group Leader Page";
 }
@@ -34,4 +34,53 @@
             <a asp-controller="Participant" asp-action="Pending" class="btn btn-dark btn-outline-info">Pending Users</a>
         </li>
     </ul>
+</div>
+
+<br />
+<br />
+
+
+<div class="container-fluid">
+    <table class="table table-striped border" id="table"
+           data-toggle="table"
+           data-search="true"
+           data-filter-control="true">
+        <thead>
+            <tr>
+                <th data-field="firstName" data-sortable="true">
+                    Name
+                </th>
+
+                <th data-field="bedSheets" data-sortable="true">
+                    Bed Sheets
+                </th>
+                <th data-field="pillowCases" data-sortable="true">
+                    Pillow Cases
+                </th>
+                <th data-field="amountRaised" data-sortable="true">
+                    Amount Raised
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+
+                <td>
+                    @item.BedSheets
+                </td>
+                <td>
+                    @item.PillowCases
+                </td>
+                <td>
+                    @item.Total
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
