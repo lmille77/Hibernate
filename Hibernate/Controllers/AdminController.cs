@@ -50,7 +50,7 @@ namespace Hibernate.Controllers
             }
             else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group Leader"))
             {
-                return RedirectToAction("Index", "Group");
+                return RedirectToAction("Index", "GroupLeader");
             }
             else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
             {
@@ -91,18 +91,6 @@ namespace Hibernate.Controllers
             return RedirectToAction("Index", "Admin");
 
         }
-
-        //public IActionResult ExpiredPass()
-        //{
-
-        //  var exp_pass = _db.Users.FirstOrDefault(u => u.LastPass1 != null);
-
-
-        //    return View(exp_pass);
-
-
-
-        //}
 
 
     }

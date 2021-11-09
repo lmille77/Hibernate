@@ -146,6 +146,33 @@ namespace Hibernate.Controllers
             }
             return View(obj);
         }
+        public IActionResult HomeRedirect()
+        {
+            if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Sales Rep"))
+            {
+                return RedirectToAction("Index", "SalesRep");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group Leader"))
+            {
+                return RedirectToAction("Index", "GroupLeader");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
+            {
+                return RedirectToAction("Index", "Participant");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Unapproved"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> Register(string returnurl = null)
