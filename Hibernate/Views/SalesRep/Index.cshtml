@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hibernate.Models.ViewModels.ApplicationUser>
+﻿@model IEnumerable<Hibernate.Models.Group>
 @{
     ViewData["Title"] = "Sales Rep Page";
 }
@@ -242,34 +242,41 @@
                    data-filter-control="true">
                 <thead>
                     <tr>
-                        <th data-field="accountNumber" data-sortable="true">
-                            Contact Name
+                        <th data-field="groupName" data-sortable="true">
+                            Group Name
                         </th>
-                        <th data-field="accountName" data-sortable="true">
-                            Account Name
+                        <th data-field="bedSheets" data-sortable="true">
+                            Bed Sheets
                         </th>
-                        <th>
-                            Donation Name
+                        <th data-field="pillowCases" data-sortable="true">
+                           Pillow Cases
                         </th>
-                        <th data-field="category" data-sortable="true">
-                            Fiscal year
+                        <th data-field="total" data-sortable="true">
+                            Total
                         </th>
-                        <th data-field="subCategory" data-sortable="true">
-                            Amount
-                        </th>
-
-
-
-
-
                     </tr>
                 </thead>
-
-
+                <tbody>
+                    @foreach(var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.BedSheets
+                        </td>
+                        <td>
+                            @item.PillowCases
+                        </td>
+                        <td style="vertical-align: top; text-align:right">
+                            @item.Total.ToString("C")
+                        </td>
+                    </tr>
+                    }
+              </tbody>
             </table>
         </div>
-
-
     </div>
 
 

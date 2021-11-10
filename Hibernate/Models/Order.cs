@@ -11,7 +11,7 @@ namespace Hibernate.Models
         [Key]
         public int OrderId { get; set; }
 
-        public string Address { get; set; }
+ 
 
         [DataType(DataType.Currency)]
         public double Total { get; set; }
@@ -22,6 +22,9 @@ namespace Hibernate.Models
 
         public Participant Participant { get; set; }
         public int? ParticipantId { get; set; }
+
+        public Group Groups { get; set; }
+        public int? GroupId { get; set; }
     }
       
     

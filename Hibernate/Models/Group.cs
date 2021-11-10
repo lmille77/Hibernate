@@ -35,5 +35,16 @@ namespace Hibernate.Models
         [NotMapped]
         public string AssignId { get; set; }
 
+        [NotMapped]
+        public double Total { get; set; }
+
+        [NotMapped]
+        public int BedSheets { get; set; }
+
+        [NotMapped]
+        public int PillowCases { get; set; }
+
+        [NotMapped]
+        public int[] OrderId { get; set; } = new int[50];
     }
 }

@@ -4,14 +4,16 @@ using Hibernate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211110195250_groupId")]
+    partial class groupId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +96,13 @@ namespace Hibernate.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("GroupId")
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GroupsGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GrouptId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ParticipantId")
@@ -108,7 +116,7 @@ namespace Hibernate.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupsGroupId");
 
                     b.HasIndex("ParticipantId");
 
@@ -445,7 +453,7 @@ namespace Hibernate.Migrations
                 {
                     b.HasOne("Hibernate.Models.Group", "Groups")
                         .WithMany()
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupsGroupId");
 
                     b.HasOne("Hibernate.Models.Participant", "Participant")
                         .WithMany()
