@@ -264,7 +264,7 @@ namespace Hibernate.Controllers
 
                     var Email = obj.Email;
                     var subject = "Account Confirmation";
-                    var body = "Please confirm your account by clicking <a href=\"" + callbackurl + "\"> here.";
+                    var body = "Please confirm your account by clicking <a href=\"" + callbackurl + "\"> here </a>.";
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
 
@@ -335,7 +335,7 @@ namespace Hibernate.Controllers
 
             var toEmail = obj.ToEmail;
             var subject = "Password Reset Confirmation";
-            var body = "Please reset your password by clicking <a href=\"" + callbackurl + "\"> here";
+            var body = "Please reset your password by clicking <a href=\"" + callbackurl + "\"> here</a>.";
             var mailHelper = new MailHelper(_configuration);
             mailHelper.Send(_configuration["Gmail:Username"], toEmail, subject, body);
 
