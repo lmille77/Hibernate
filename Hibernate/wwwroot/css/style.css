@@ -97,7 +97,7 @@
 #centerform0 {
     margin-left: auto;
     margin-right: auto;
-    width: 550px;
+    width: 500px;
     padding:20px;
     border: 1px solid;
     border-color: black;
@@ -109,3 +109,5 @@
     width: 560px;
     padding: 10px;
 }
+
+
