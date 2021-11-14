@@ -11,13 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Hibernate.Models.ViewModels;
+using Hibernate.Helpers;
 
 namespace Hibernate.Controllers
 {
     public class GroupsController : Controller
     {
-        
 
+        private readonly ApplicationDbContext _db;
         private IConfiguration _configuration;
         private IWebHostEnvironment _webHostEnvironment;
 
@@ -319,5 +320,7 @@ namespace Hibernate.Controllers
         {
             return _context.Groups.Any(e => e.GroupId == id);
         }
+        
+        
     }
 }

@@ -14,7 +14,7 @@
             <div class="form-group">
                 <label asp-for="LastName">Last Name</label>
                 <input asp-for="LastName" class="form-control" />
-            </div>            
+            </div>
             <div class="form-group">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" readonly class="form-control" />
@@ -24,8 +24,8 @@
             </div>
             <!--<div class="form-group">
                 <label asp-for="RoleId"></label>-->
-                @*Might be form select with the newer bootstrap*@
-                <!--<select asp-for="RoleId" asp-items="@Model.RoleList" class="form-control">
+            @*Might be form select with the newer bootstrap*@
+            <!--<select asp-for="RoleId" asp-items="@Model.RoleList" class="form-control">
                     <option disabled selected>--Select Role--</option>
                 </select>
             </div>-->
@@ -36,4 +36,31 @@
             </div>
         </form>
     </div>
+</div>
+<link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/filter-control/utils.min.js"></script>
+
+<div class="sidebar-container border-info">
+    <div>
+        <br />
+        <div class="text-center">Quick Actions</div>
+        <br />
+    </div>
+
+    <ul class="sidebar-navigation">
+
+        <li>
+            <a asp-controller="GroupLeader" asp-action="Index" class="btn btn-dark btn-outline-info">Dashboard</a>
+        </li>
+
+        <li>
+            <a asp-controller="Participant" asp-action="List" class="btn btn-info btn-outline-light">Participant List</a>
+        </li>
+        <li>
+            <a asp-controller="Participant" asp-action="Pending" class="btn btn-dark btn-outline-info">Pending Users</a>
+        </li>
+    </ul>
 </div>
