@@ -7,6 +7,37 @@
 
 <h2 class="text-center">Create a Group Leader</h2>
 <br />
+
+<div class="sidebar-container border-info">
+    <div>
+        <br />
+        <div class="text-center">Quick Actions</div>
+        <br />
+    </div>
+
+    <ul class="sidebar-navigation">
+
+        <li>
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-dark btn-outline-info">
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
+                Pending Approval
+            </a>
+        </li>
+        <li>
+            <a asp-controller="User" asp-action="Index" class="btn btn-info btn-outline-light">Users List</a>
+        </li>
+        <li>
+            <a asp-controller="Groups" asp-action="AdminIndex" class="btn btn-dark btn-outline-info">Groups List</a>
+        </li>
+        <li>
+            <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
+        </li>
+    </ul>
+</div>
 <div id="centerform0">
     <br />
     <form method="post" asp-action="CreateGL" asp-controller="User">
