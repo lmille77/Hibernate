@@ -60,7 +60,11 @@ namespace Hibernate.Controllers
                     groups.Add(item);
                 }
             }
-            
+            foreach(var item in groups)
+            {
+                var userid = _context.GroupLeaders.Where(u => u.GroupId == item.GroupId).Select(e => e.UserId).FirstOrDefault();
+                item.GroupLeader = _context.ApplicationUser.Where(u => u.Id == userid).Select(e => e.FirstName + " " + e.LastName).FirstOrDefault();
+            }
             return View(groups);
         }
         
@@ -83,9 +87,9 @@ namespace Hibernate.Controllers
                 {
                     item.SalesRepName = "None";
                 }
-               
-            }
-
+                var userid = _context.GroupLeaders.Where(u => u.GroupId == item.GroupId).Select(e => e.UserId).FirstOrDefault();
+                item.GroupLeader = _context.ApplicationUser.Where(u => u.Id == userid).Select(e => e.FirstName + " " + e.LastName).FirstOrDefault();
+           }
             return View(gList);
 
 

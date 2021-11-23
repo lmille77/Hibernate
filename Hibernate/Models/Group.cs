@@ -28,6 +28,8 @@ namespace Hibernate.Models
         public SalesRep SalesRep { get; set; }
         
         public int SalesRepId { get; set; }
+        [NotMapped]
+        public string GroupLeader { get; set; }
 
         [NotMapped]
         public string SalesRepName { get; set; }

@@ -86,8 +86,8 @@
                     <td  style="width:150px">
                         @Html.DisplayFor(modelItem => item.State)
                     </td>
-                    <td>
-
+                    <td style="width:150px">
+                        @Html.DisplayFor(modelItem => item.GroupLeader)
                     </td>
                     <td style="width:200px">
                         <form asp-action="Delete" asp-route-id="@item.GroupId">
