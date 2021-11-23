@@ -131,7 +131,7 @@ namespace Hibernate.Controllers
         public async Task<IActionResult> SRCreate(Group obj)
         {
             if (ModelState.IsValid)
-            {
+            {                
                 var id = _userManager.GetUserId(User);
                 //search salerep table 
                
@@ -216,6 +216,12 @@ namespace Hibernate.Controllers
             }
             if (ModelState.IsValid)
             {
+                if(obj.AssignId == null)
+                {
+                    ModelState.AddModelError("", "You must select a Sales Rep.");
+                    return View(obj);
+                }
+
                 var id = obj.AssignId;
                 //search salerep table 
 
@@ -240,7 +246,7 @@ namespace Hibernate.Controllers
             return View(obj);
         }
 
-        // GET: Groups/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -256,9 +262,7 @@ namespace Hibernate.Controllers
             return View(@group);
         }
 
-        // POST: Groups/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Address,City,State")] Group @group)
@@ -286,7 +290,15 @@ namespace Hibernate.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                if(User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("AdminIndex");
+                }
+                if (User.IsInRole("Sales Rep"))
+                {
+                    return RedirectToAction("SRIndex");
+                }
+
             }
             return View(@group);
         }

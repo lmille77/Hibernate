@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Hibernate.Migrations
 {
-    public partial class addnewtables : Migration
+    public partial class config_db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
