@@ -5,11 +5,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (User.IsInRole("Admin"))
+{
+    <div class="sidebar-container border-info">
+        <div>
+            <br />
+            <div class="text-center">Quick Actions</div>
+            <br />
+        </div>
+
+        <ul class="sidebar-navigation">
+            <li>
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-dark btn-outline-info">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
+                    Pending Approval
+                </a>
+            </li>
+            <li>
+                <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
+            </li>
+            <li>
+                <a asp-controller="Groups" asp-action="AdminIndex" class="btn btn-info btn-outline-light">Groups List</a>
+            </li>
+            <li>
+                <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
+            </li>
+        </ul>
+    </div>
+}
+
+@if (User.IsInRole("Sales Rep"))
+{
+    <div class="sidebar-container border-info">
+        <div>
+            <br />
+            <div class="text-center">Quick Actions</div>
+            <br />
+        </div>
+
+        <ul class="sidebar-navigation">
+            <li>
+                <a asp-controller="SalesRep" asp-action="Index" class="btn btn-dark btn-outline-info">Dashboard</a>
+            </li>
+            <li>
+                <a asp-controller="Groups" asp-action="SRIndex" class="btn btn-info btn-outline-light">Groups List</a>
+            </li>
+        </ul>
+    </div>
+}
+
 
 <h2 class="text-center">Edit a Group</h2>
 <br />
 <div id="centerform1">
-    <form asp-action="Edit">
+    <form asp-action="Edit" asp-controller = "Groups" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="GroupId" />
         <div class="form-group row">
@@ -43,19 +96,19 @@
         @if (User.IsInRole("Admin"))
         {
             <div class="text-center">
-                <button type="submit" class="btn btn-success">Update</button>
+                <input type="submit" class="btn btn-success" value="Update">
                 <a asp-action="AdminIndex" class="btn btn-warning" style="width:auto">Back to List</a>
             </div>
         }
         @if (User.IsInRole("Sales Rep"))
         {
             <div class="text-center">
-                <button type="submit" class="btn btn-success">Update</button>
+                <input type="submit" class="btn btn-success" value="Update">
                 <a asp-action="SRIndex" class="btn btn-warning" style="width:auto">Back to List</a>
             </div>
         }
     </form>
-    
+
 </div>
 
 
