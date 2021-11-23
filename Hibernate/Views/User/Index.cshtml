@@ -59,6 +59,9 @@
                 <th data-field="role" data-sortable="true">
                     Role
                 </th>
+                <th data-field="group" data-sortable="true">
+                   Group Name
+                </th>
                 <th>
                     Actions
                 </th>
@@ -79,13 +82,18 @@
                         <td>
                             @item.Role
                         </td>
-                        @*<td>
-                            @if (@item.groupName == null)
-                            {
-                                item.groupName = "n/a";
-                            }
-                            @item.groupName
-                        </td>*@
+                        @if (@item.GroupName != null)
+                         {
+                            <td>
+                            @item.GroupName
+                            </td>
+                         }
+                        else
+                        {
+                            <td>
+                            n/a
+                            </td>
+                        }
                         <td>
                             <div class="text-center">
                                 <form asp-action="Delete" asp-route-userId="@item.Id">

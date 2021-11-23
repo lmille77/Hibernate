@@ -313,7 +313,14 @@ namespace Hibernate.Controllers
             var @group = await _context.Groups.FindAsync(id);
             _context.Groups.Remove(@group);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if(User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminIndex", "Groups");
+            }
+            else
+            {
+                return RedirectToAction("SRIndex", "Groups");
+            }
         }
 
         private bool GroupExists(int id)

@@ -54,7 +54,18 @@ namespace NewSwift.Controllers
                 {
                     user.Role = roles.FirstOrDefault(u => u.Id == role.RoleId).Name;
                 }
+                if(user.Role == "Group Leader")
+                {
+                    user.GroupId = _db.GroupLeaders.Where(u => u.UserId == user.Id).Select(e => e.GroupId).FirstOrDefault();
+                    user.GroupName = _db.Groups.Where(u => u.GroupId == user.GroupId).Select(e => e.Name).FirstOrDefault();
+                }
+                if (user.Role == "Participant")
+                {
+                    user.GroupId = _db.Participants.Where(u => u.UserId == user.Id).Select(e => e.GroupId).FirstOrDefault();
+                    user.GroupName = _db.Groups.Where(u => u.GroupId == user.GroupId).Select(e => e.Name).FirstOrDefault();
+                }
             }
+            
 
             return View(userList);
 
