@@ -14,50 +14,48 @@
         <input type="hidden" asp-for="GroupId" />
         <div class="form-group row">
             <div class="col-lg-12">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Group Name:</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group row">
             <div class="col-lg-12">
-                <label asp-for="Address" class="control-label"></label>
+                <label asp-for="Address" class="control-label">Address:</label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group row">
             <div class="col-lg-6">
-                <label asp-for="City" class="control-label"></label>
+                <label asp-for="City" class="control-label">City:</label>
                 <input asp-for="City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="col-lg-6">
-                <label asp-for="State" class="control-label"></label>
+                <label asp-for="State" class="control-label">State:</label>
                 <input asp-for="State" class="form-control" />
                 <span asp-validation-for="State" class="text-danger"></span>
             </div>
         </div>
-        <br />
-        <div class="text-center">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
+
         <br />
         @if (User.IsInRole("Admin"))
         {
             <div class="text-center">
-                <a asp-action="AdminIndex">Back to List</a>
+                <button type="submit" class="btn btn-success">Update</button>
+                <a asp-action="AdminIndex" class="btn btn-warning" style="width:auto">Back to List</a>
             </div>
         }
         @if (User.IsInRole("Sales Rep"))
         {
             <div class="text-center">
-                <a asp-action="SRIndex">Back to List</a>
+                <button type="submit" class="btn btn-success">Update</button>
+                <a asp-action="SRIndex" class="btn btn-warning" style="width:auto">Back to List</a>
             </div>
         }
     </form>
-
-
+    
 </div>
 
 
