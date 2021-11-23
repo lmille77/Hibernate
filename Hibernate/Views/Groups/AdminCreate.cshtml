@@ -5,48 +5,43 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center" style="margin-left:50px">Create a Group</h2>
+<h2 class="text-center">Create a Group</h2>
 <br />
-<div style="border: 1px solid; border-color: lightgray; width: 450px; margin: 0 auto;padding-left:20px">
+<div id="centerform0">
     <br />
     <br />
     <form method="post" asp-action="AdminCreate" asp-controller="Groups">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="form-group">
-            <div class="col-md-10">
+        <div class="form-group row">
+            <div class="col-lg-12">
                 <input asp-for="Name" class="form-control" placeholder="Group Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
         </div>
         <br />
-        <div class="form-group">
-            <div class="col-md-10">
+        <div class="form-group row">
+            <div class="col-lg-12">
                 <input asp-for="Address" class="form-control" placeholder="Street Address" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
 
         </div>
         <br />
-        <div class="form-group">
-            <div class="col-md-6">
+        <div class="form-group row">
+            <div class="col-lg-6">
                 <input asp-for="City" class="form-control" placeholder="City" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
-
-        </div>
-        <br />
-        <div class="form-group">
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 <input asp-for="State" class="form-control" placeholder="State" />
                 <span asp-validation-for="State" class="text-danger"></span>
             </div>
-
         </div>
         <br />
-        <div class="form-group">
-            <div class="col-md-8">
+        <div class="form-group row">
+            <div class="col-lg-10">
                 <select asp-for="AssignId" asp-items="@ViewBag.Users" class="form-control">
                     <option disabled selected>--Select a Sales Rep--</option>
                 </select>

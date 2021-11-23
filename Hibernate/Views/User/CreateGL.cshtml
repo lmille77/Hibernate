@@ -57,9 +57,19 @@
         </div>
     </form>
     <br />
-    <div class="text-center">
-        <a asp-action="Index">Back to List</a>
-    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="text-center">
+            <a asp-action="Index">Back to List</a>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <a asp-action="SRIndex" asp-controller="Groups">Back to List</a>
+        </div>
+    }
+
 </div>
 
 
