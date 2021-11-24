@@ -262,6 +262,12 @@ namespace NewSwift.Controllers
 
             if (ModelState.IsValid)
             {
+                if(obj.GroupSelected == null)
+                {
+                    ModelState.AddModelError("", "You must select a group.");
+                    return View(obj);
+                }
+
                 //object created by user input
                 ApplicationUser user = new ApplicationUser()
                 {
@@ -367,6 +373,11 @@ namespace NewSwift.Controllers
 
             if (ModelState.IsValid)
             {
+                if (obj.GroupSelected == null)
+                {
+                    ModelState.AddModelError("", "You must select a group.");
+                    return View(obj);
+                }
                 //object created by user input
                 ApplicationUser user = new ApplicationUser()
                 {
