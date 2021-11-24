@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hibernate.Models.Participant>
+﻿@model Hibernate.Models.ViewModels.Parts
 @{
     ViewData["Title"] = "Group Leader Page";
 }
@@ -12,6 +12,14 @@
 <div class="text-center">
     <h1>Group Leader Dashboard</h1>
 </div>
+<br />
+<br />
+
+
+<div id="chart_div"></div>
+
+<br />
+<br />
 
 <div class="sidebar-container border-info">
     <div>
@@ -63,24 +71,65 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var item in Model)
+            @foreach (var item in Model.Participants)
             {
-            <tr>
-                <td>
-                    @item.Name
-                </td>
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
 
-                <td>
-                    @item.BedSheets
-                </td>
-                <td>
-                    @item.PillowCases
-                </td>
-                <td style="vertical-align: top; text-align:right">
-                    @item.Total.ToString("C")
-                </td>
-            </tr>
+                    <td>
+                        @item.BedSheets
+                    </td>
+                    <td>
+                        @item.PillowCases
+                    </td>
+                    <td style="vertical-align: top; text-align:right">
+                        @item.Total.ToString("C")
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
+    <table class="table table-striped border">
+        <tr>
+            <th>Total</th>
+            <th></th>
+            <th></th>
+            <th style="text-align:right" >@Model.GTotal.ToString("C")</th>
+        </tr>
+    </table>
 </div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    google.charts.load('current', { packages: ['corechart', 'bar'] });
+    google.charts.setOnLoadCallback(drawBasic);
+
+    function drawBasic() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Amount Raised', 'USD',],
+            ['Brittany Taylor', 55],
+            ['Chelesea Jay', 95],
+            ['Barbie Gee', 40],
+            ['Jesse Rich', 15]
+        ]);
+
+        var options = {
+            title: 'Top Participants',
+            chartArea: { width: '50%' },
+            hAxis: {
+                title: 'Amount Raised in USD',
+                minValue: 0
+            },
+            vAxis: {
+                title: ''
+            }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+</script>

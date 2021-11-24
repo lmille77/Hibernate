@@ -54,6 +54,7 @@ namespace Hibernate.Controllers
             List<Participant> participants = new List<Participant>();
 
             var pUsers = _db.ApplicationUser.ToList();
+           double gtotal = 0;
 
             int i = 0;
  
@@ -87,6 +88,7 @@ namespace Hibernate.Controllers
                     if (item.ParticipantId == parts.ParticipantId)
                     {
                         parts.Total += item.Total;
+                        gtotal += item.Total;
                         parts.OrderId[i] = item.OrderId;
                         i++;
                     }
@@ -120,10 +122,14 @@ namespace Hibernate.Controllers
                 }
             }
 
+            Parts partsView = new Parts
+            {
+                Participants = participants,
+                GTotal = gtotal
+            };
 
 
-
-            return View(participants);
+            return View(partsView);
         }
     }
 }

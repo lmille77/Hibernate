@@ -32,5 +32,7 @@ namespace Hibernate.Models
 
         [NotMapped]
         public string Name { get; set; }
+
+      
     }
 }

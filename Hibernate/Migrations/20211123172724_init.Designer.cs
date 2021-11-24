@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211113194633_addnewtables")]
-    partial class addnewtables
+    [Migration("20211123172724_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
