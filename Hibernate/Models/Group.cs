@@ -1,4 +1,5 @@
 ﻿using Hibernate.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,7 +30,13 @@ namespace Hibernate.Models
         
         public int SalesRepId { get; set; }
         [NotMapped]
+        public List<SelectListItem> GL_List { get; set; }
+        [NotMapped]
         public string GroupLeader { get; set; }
+        [NotMapped]
+        public string GroupLeaderId { get; set; }
+        [NotMapped]
+        public GroupLeader GroupLeaderObj { get; set; }
 
         [NotMapped]
         public string SalesRepName { get; set; }

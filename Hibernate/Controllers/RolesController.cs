@@ -74,14 +74,14 @@ namespace NewSwift.Controllers
                 var objRoleFromDb = _db.Roles.FirstOrDefault(u => u.Id == roleObj.Id);
                 if (objRoleFromDb == null)
                 {
-                    TempData[SD.Error] = "Role nto found";
+                    TempData[SD.Error] = "Role not found";
                     return RedirectToAction(nameof(Index));
                 }
                 objRoleFromDb.Name = roleObj.Name;
                 objRoleFromDb.NormalizedName = roleObj.Name.ToUpper();
                 //updates database
                 var result = await _roleManager.UpdateAsync(objRoleFromDb);
-                TempData[SD.Success] = "Role was udpated successfully";
+                TempData[SD.Success] = "Role was updated successfully";
             }
 
             return RedirectToAction(nameof(Index));

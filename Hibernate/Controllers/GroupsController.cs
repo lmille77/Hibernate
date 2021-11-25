@@ -254,53 +254,92 @@ namespace Hibernate.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups.FindAsync(id);
-            if (@group == null)
+            var group = await _context.Groups.FindAsync(id);
+            if (group == null)
             {
                 return NotFound();
             }
-            return View(@group);
+
+            var gl_role = await _roleManager.FindByNameAsync("Group Leader");
+            var roles_list = _context.UserRoles.ToList();
+            var user_list = _context.ApplicationUser.ToList();
+            List<ApplicationUser> gl_to_add = new List<ApplicationUser>();
+            List<SelectListItem> selectitems = new List<SelectListItem>();
+
+            foreach(var user in user_list)
+            {
+                foreach(var role in roles_list)
+                {
+                    if(gl_role.Id == role.RoleId && role.UserId == user.Id)
+                    {
+                        gl_to_add.Add(user);
+                    }
+                }
+            }
+
+            group.GroupLeaderObj = _context.GroupLeaders.Where(u => u.GroupId == group.GroupId).Select(e => e).FirstOrDefault();
+
+            foreach (var item in gl_to_add)
+            {
+                if (item.Id == group.GroupLeaderObj.UserId)
+                {
+                    SelectListItem newitem = new SelectListItem
+                    {
+                        Text = item.FirstName + " " + item.LastName,
+                        Value = item.Id,
+                        Selected = true
+                    };
+                    selectitems.Add(newitem);
+                }
+                else
+                {
+                    SelectListItem newitem = new SelectListItem
+                    {
+                        Text = item.FirstName + " " + item.LastName,
+                        Value = item.Id,
+                        Selected = false
+                    };
+                    selectitems.Add(newitem);
+                } 
+            }
+
+            group.GL_List = selectitems;
+            return View(group);
         }
 
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Address,City,State")] Group @group)
+        public async Task<IActionResult> Edit(int id, Group group)
         {
-            if (id != @group.GroupId)
+            //update group info
+            var groupfromdb = await _context.Groups.FindAsync(id);
+            groupfromdb.Name = group.Name;
+            groupfromdb.Address = group.Address;
+            groupfromdb.City = group.City;
+            groupfromdb.State = group.State;
+
+            //update group leader
+            var groupleadersfromdb = _context.GroupLeaders.ToList();
+            foreach(var item in groupleadersfromdb)
             {
-                return NotFound();
+                if(item.GroupId == groupfromdb.GroupId)
+                {
+                    item.UserId = group.GroupLeaderId;
+                }
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(@group);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GroupExists(@group.GroupId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                if(User.IsInRole("Admin"))
-                {
-                    return RedirectToAction("AdminIndex");
-                }
-                if (User.IsInRole("Sales Rep"))
-                {
-                    return RedirectToAction("SRIndex");
-                }
 
+
+            _context.SaveChanges();
+            if(User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminIndex");
             }
-            return View(@group);
+            else
+            {
+                return RedirectToAction("SRIndex");
+            }
         }
 
         // GET: Groups/Delete/5
