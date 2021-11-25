@@ -2,8 +2,13 @@
 @{
     var title = "Create Role";
 }
+@if (Model != null && !String.IsNullOrEmpty(Model.Id))
+{
+    title = "Edit Role";
+    <input asp-for="@Model.Id" hidden />
+}
 
-<h2 class="text-center">Create a Role</h2>
+<h2 class="text-center">@title</h2>
 <br />
 
 <div class="sidebar-container border-info">
@@ -58,7 +63,16 @@
         <br />
 
         <div class="text-center">
-            <input type="submit" class="btn btn-success" value="Create Role" />
+            @if (Model != null && !String.IsNullOrEmpty(Model.Id))
+            {
+                //update
+                <input type="submit" class="btn btn-info" value="Update" />
+            }
+            else
+            {
+                //create
+                <input type="submit" class="btn btn-primary" value="Create Role" />
+            }
         </div>
         <br />
         <div class="text-center">
