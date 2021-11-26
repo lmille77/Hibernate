@@ -40,6 +40,86 @@
         </li>
     </ul>
 </div>
+<html>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart', 'bar'] });
+        google.charts.setOnLoadCallback(drawBasic);
+
+        function drawBasic() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Amount Raised', 'USD',],
+                ['Emma Yern', 80],
+                ['Chelesea Jay', 95],
+                ['Brittany Taylor', 55],
+                ['Barbie Gee', 40]
+            ]);
+
+            var data1 = google.visualization.arrayToDataTable([
+                ['Amount Raised', 'USD',],
+                ['Emma Yern', 80],
+                ['Chelesea Jay', 95],
+                ['Brittany Taylor', 55],
+                ['Barbie Gee', 40]
+            ]);
+
+            var options = {
+                title: 'Top Participants',
+                chartArea: { width: '50%' },
+                hAxis: {
+                    title: 'Amount Raised in USD',
+                    minValue: 0
+                },
+                vAxis: {
+                    title: ''
+                }
+            };
+
+            var options1 = {
+                title: 'Top Participants',
+                chartArea: { width: '50%' },
+                hAxis: {
+                    title: 'Amount Raised in USD',
+                    minValue: 0
+                },
+                vAxis: {
+                    title: ''
+                }
+            };
+
+
+            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+
+
+            var chart1 = new google.visualization.BarChart(document.getElementById('chart2'));
+
+            chart1.draw(data1, options1);
+        }
+    </script>
+</head>
+
+<body>
+    @{
+
+        if (Model.GId == 1)
+        {
+            <div id="chart_div"></div>
+        }
+
+        if (Model.GId == 2)
+        {
+            <div id="chart2"></div>
+        }
+
+
+    }
+</body>
+</html>
+
 
 <br />
 <br />
@@ -99,84 +179,4 @@
 </div>
 
 
-
-<html>
-<head>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
-    google.charts.load('current', { packages: ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback(drawBasic);
-
-    function drawBasic() {
-
-        var data = google.visualization.arrayToDataTable([
-            ['Amount Raised', 'USD',],
-            ['Emma Yern', 80],
-            ['Chelesea Jay', 95],
-            ['Brittany Taylor', 55],
-            ['Barbie Gee', 40]
-        ]);
-
-        var data1 = google.visualization.arrayToDataTable([
-            ['Amount Raised', 'USD',],
-            ['Emma Yern', 80],
-            ['Chelesea Jay', 95],
-            ['Brittany Taylor', 55],
-            ['Barbie Gee', 40]
-        ]);
-
-        var options = {
-            title: 'Top Participants',
-            chartArea: { width: '50%' },
-            hAxis: {
-                title: 'Amount Raised in USD',
-                minValue: 0
-            },
-            vAxis: {
-                title: ''
-            }
-        };
-
-        var options1 = {
-            title: 'Top Participants',
-            chartArea: { width: '50%' },
-            hAxis: {
-                title: 'Amount Raised in USD',
-                minValue: 0
-            },
-            vAxis: {
-                title: ''
-            }
-        };
-
-
-        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-
-        chart.draw(data, options);
-
-
-        var chart1 = new google.visualization.BarChart(document.getElementById('chart2'));
-
-        chart1.draw(data1, options1);
-    }
-</script>
-    </head>
-
-<body>
-    @{
-
-        if (Model.GId == 1)
-        {
-            <div id="chart_div"></div>
-        }
-
-        if (Model.GId == 2)
-        {
-            <div id="chart2"></div>
-        }
-
-
-    }
-</body>
-</html>
 
