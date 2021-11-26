@@ -125,7 +125,8 @@ namespace Hibernate.Controllers
             Parts partsView = new Parts
             {
                 Participants = participants,
-                GTotal = gtotal
+                GTotal = gtotal,
+                GId = gId
             };
 
 
