@@ -29,14 +29,8 @@
 </div>
 
 <br />
-<div>
-    <div class="col-6">
-        <h2 class="text-primary">Pending Participants List</h2>
-
-    </div>
-    
-</div>
-
+<h2 class="text-center">Pending Participants List</h2>
+<br />
 <div class="p-4 border w-100">
     <table class="table table-striped border">
         <tr class="table-secondary">
@@ -47,7 +41,7 @@
             <th>
                 Name
             </th>
-          
+
             <th align="right">Action</th>
         </tr>
         @foreach (var item in Model)
@@ -59,7 +53,7 @@
                 <td>
                     @item.FirstName  @item.LastName
                 </td>
-              
+
 
                 <td>
                     <div class="text-left   ">
