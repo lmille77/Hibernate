@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace Hibernate.Models.ViewModels
 {
-    public class Parts
+    public class Groups
     {
+
         [NotMapped]
         public double GTotal { get; set; }
 
         [NotMapped]
-        public List<Participant> Participants { get; set; }
+        public List<Group> Gs{ get; set; }
 
         [NotMapped]
-        public int GId { get; set; }
+        public int SId { get; set; }
     }
 }

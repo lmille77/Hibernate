@@ -51,7 +51,7 @@ namespace Hibernate.Controllers
 
             var orderItems = _db.Order_Items.ToList();
 
-
+            double t = 0;
             int i = 0;
 
 
@@ -62,6 +62,7 @@ namespace Hibernate.Controllers
                     if (item.GroupId == groups.GroupId)
                     {
                         groups.Total += item.Total;
+                        t += item.Total;
                         groups.OrderId[i] = item.OrderId;
                         i++;
                     }
@@ -93,9 +94,16 @@ namespace Hibernate.Controllers
                 }
             }
 
+            Groups G = new Groups
+            {
+                Gs = gList,
+                SId = sId,
+                GTotal = t
+            };
 
 
-            return View(gList);
+
+            return View(G);
         }
 
 
