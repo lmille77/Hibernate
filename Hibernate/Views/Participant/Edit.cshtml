@@ -1,7 +1,6 @@
 ﻿@model Hibernate.Models.ViewModels.ApplicationUser
-<h1 class="text-info">Edit User</h1>
-<div class="row">
-    <div class="col-md-8">
+<h2 class="text-center">Edit User</h2>
+<div id="centerform1">
         <form method="post" asp-action="Edit">
             <input asp-for="@Model.Id" hidden />
             <hr />
@@ -29,7 +28,8 @@
                     <option disabled selected>--Select Role--</option>
                 </select>
             </div>-->
-            <div class="form-group">
+            <br />
+            <div class="text-center">
                 <button type="submit" class="btn btn-success">Update</button>
                 @*link to go back*@
                 <a asp-action="list" class="btn btn-warning" style="width:auto">Back to User</a>
