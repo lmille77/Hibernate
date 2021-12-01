@@ -42,7 +42,66 @@ namespace Hibernate.Controllers
         {
             if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {
-                return View();
+             
+                var gList = _db.Groups.ToList();
+
+                var orders = _db.Orders.ToList();
+
+                var orderItems = _db.Order_Items.ToList();
+
+                double t = 0;
+                int i = 0;
+
+
+                foreach (var groups in gList)
+                {
+                    foreach (var item in orders)
+                    {
+                        if (item.GroupId == groups.GroupId)
+                        {
+                            groups.Total += item.Total;
+                            t += item.Total;
+                            groups.OrderId[i] = item.OrderId;
+                            i++;
+                        }
+                    }
+                }
+
+
+                foreach (var group in gList)
+                {
+                    foreach (var item in orderItems)
+                    {
+                        for (int j = 0; j < group.OrderId.Length; j++)
+                        {
+                            if (group.OrderId[j] == item.OrderId)
+                            {
+                                if (item.ItemId == 1)
+                                {
+                                    group.BedSheets++;
+                                }
+
+                                if (item.ItemId == 2)
+                                {
+                                    group.PillowCases++;
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+
+                Groups G = new Groups
+                {
+                    Gs = gList,
+                    GTotal = t
+                };
+
+
+
+                return View(G);
+
             }
             else if (_signInManager.IsSignedIn(User) && User.IsInRole("Sales Rep"))
             {
