@@ -8,7 +8,11 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.SecurityTokenService;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Hibernate.Models;
 
 namespace Hibernate.Controllers
 {
@@ -39,33 +43,98 @@ namespace Hibernate.Controllers
 
 
         public IActionResult Index()
-        {            
-            return View();
+        {
+            var sups = _db.Supporters.ToList();
+
+            var uId = _userManager.GetUserId(User);
+
+            var pId = _db.Participants.Where(u => u.UserId == uId).Select(u => u.ParticipantId).FirstOrDefault();
+
+            var orders = _db.Orders.ToList();
+
+            var orderItems = _db.Order_Items.ToList();
+
+           
+
+            List<Supporter> supporters = new List<Supporter>();
+
+            foreach(var item in sups)
+            {
+                if(item.ParticipantId == pId)
+                {
+                    supporters.Add(item);
+                }
+            }
+            
+            foreach(var sup in supporters)
+            {
+                foreach(var item in orders)
+                {
+                    if(item.SupporterId == sup.SupporterId)
+                    {
+                        sup.Total += item.Total;
+                        sup.OrderId = item.OrderId;
+                    }
+                }
+            }
+
+            foreach(var sup in supporters)
+            {
+                foreach (var item in orderItems)
+                {
+                    if(sup.OrderId == item.OrderId)
+                    {
+                        if(item.ItemId == 1)
+                        {
+                            sup.BedSheets++;
+                        }
+
+                        if(item.ItemId == 2)
+                        {
+                            sup.PillowCases++;
+                        }
+                    }
+                }
+            }
+
+
+            return View(supporters);
         }
 
 
 
         public async Task<IActionResult> list()
         {
-            
-            var list = await _userManager.GetUsersInRoleAsync("Participant");
-            
-           
-            //foreach (var user in list)
+
+            var uId = _userManager.GetUserId(User);
+
+            int gId = _db.GroupLeaders.Where(u => u.UserId == uId).Select(i => i.GroupId).FirstOrDefault();
+
+            var pList = _db.Participants.Where(i => i.GroupId == gId).Select(i => i.UserId).ToList();
+
+            //if(pList == null)
             //{
-            //    //this will find if there are any roles in the userRole table
-            //    var role = userRole.FirstOrDefault(u => u.UserId == user.Id);
-            //    if (role == null)
-            //    {
-            //        user.Role = "None";
-            //    }
-            //    else
-            //    {
-            //        user.Role = roles.FirstOrDefault(u => u.Id == role.RoleId).Name;
-            //    }
+            //    return NotFound();
             //}
 
-            return View(list);
+            var userList = _db.ApplicationUser.ToList();
+
+            List<ApplicationUser> users = new List<ApplicationUser>();
+
+            foreach (var item in userList)
+            {
+                foreach (var id in pList)
+                {
+                    if (id == item.Id && item.isApproved == true)
+                    {
+                        users.Add(item);
+                    }
+                }
+            }
+
+          
+
+            return View(users);
         }
 
 
@@ -124,7 +193,7 @@ namespace Hibernate.Controllers
                 objFromDb.LastName = user.LastName;
                 _db.SaveChanges();
                 TempData[SD.Success] = "User has been edited successfully.";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("list", "Participant");
             }
 
 
@@ -136,6 +205,10 @@ namespace Hibernate.Controllers
             return View(user);
         }
 
+
+
+
+
         [HttpGet]
         public IActionResult Upsert(string id)
         {
@@ -143,6 +216,10 @@ namespace Hibernate.Controllers
 
             return View();
         }
+
+
+
+
 
 
         [HttpPost]
@@ -153,7 +230,19 @@ namespace Hibernate.Controllers
             string _Firstname = obj.FirstName.ToLower();
             string _Lastname = obj.LastName.ToLower();
 
+            var groupList = _db.Groups.ToList();
+            //List<SelectListItem> groups = new List<SelectListItem>();
+            //foreach (var group in groupList)
+            //{
+            //    SelectListItem li = new SelectListItem
+            //    {
+            //        Value = group.Name,
+            //        Text = group.Name,
 
+            //    };
+            //    groups.Add(li);
+            //    ViewBag.Users = groups;
+            //}
 
             if (ModelState.IsValid)
             {
@@ -165,54 +254,42 @@ namespace Hibernate.Controllers
                     FirstName = obj.FirstName,
                     LastName = obj.LastName,
                     Email = obj.Email,
-                    isApproved = false,
-                    PasswordDate = DateTime.Now
+                    isApproved = true,
+                    PasswordDate = DateTime.Now,
+
                 };
-
-
+                var id = user.Id;
+                var uId = _userManager.GetUserId(User);
+                var groupId = _db.GroupLeaders.Where(u => u.UserId == uId).Select(u => u.GroupId).FirstOrDefault();
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
-
+                //var groupId = _db.Groups.Where(u => u.Name == obj.GroupSelected).Select(e => e.GroupId).FirstOrDefault();
 
                 if (result.Succeeded)
                 {
 
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Admin")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Admin");
-                    //}
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Sales Rep")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Sales Rep");
-                    //}
+                    var partToAdd = new Participant
+                    {
+                        UserId = user.Id,
+                        GroupId = groupId
+                    };
 
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Group Leader")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Group Leader");
-                    //}
-
-                    //if (obj.RoleSelected != null && obj.RoleSelected.Length > 0 && obj.RoleSelected == "Participant")
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Admin");
-                    //}
+                    _db.Participants.Add(partToAdd);
+                    _db.SaveChanges();
 
 
                     await _userManager.AddToRoleAsync(user, "Participant");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-
                     var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-
                     var Email = obj.Email;
                     var subject = "Account Confirmation";
                     var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
-
                     TempData[SD.Success] = "Account Created";
-                    return RedirectToAction("Index", "Participant");
+                    return RedirectToAction("list", "Participant");
 
                 }
                 else
@@ -220,12 +297,116 @@ namespace Hibernate.Controllers
                     ModelState.AddModelError("", "An account with the entered email already exists.");
                 }
 
-
             }
             return View(obj);
         }
 
 
+      
 
+        public IActionResult SupList()
+        {
+          
+
+            var uId = _userManager.GetUserId(User);
+
+            int pId = _db.Participants.Where(i => i.UserId == uId).Select(i => i.ParticipantId).SingleOrDefault();
+
+            var pList = _db.Supporters.Where(i => i.ParticipantId == pId).ToList();
+
+            
+
+
+            return View(pList);
+        }
+
+        public IActionResult participant()
+        {
+            var participantList = _db.Participants.ToList();
+
+            var OrderList = _db.Order_Items.ToList();
+
+            return View();
+        }
+
+    
+
+        public async Task<IActionResult> pending()
+        {
+            var part_list = _db.Participants.ToList();
+            var all_parts = await _userManager.GetUsersInRoleAsync("Participant");
+            List<ApplicationUser> unapproved_list = new List<ApplicationUser>();
+
+            var id = _userManager.GetUserId(User);
+
+            var gId = _db.GroupLeaders.Where(u => u.UserId == id).Select(e => e.GroupId).FirstOrDefault();
+
+           
+            foreach (var user in all_parts)
+            {
+                if(user.isApproved != true)
+                {
+                    user.GroupId = _db.Participants.Where(u => u.UserId == user.Id).Select(e => e.GroupId).FirstOrDefault();
+                    user.GroupName = _db.Groups.Where(u => u.GroupId == user.GroupId).Select(e => e.Name).FirstOrDefault();
+                }
+              
+
+            }
+
+
+            foreach (var user in all_parts)
+            {
+                if (user.isApproved == false && user.GroupId == gId)
+                {
+                    unapproved_list.Add(user);
+                }
+            }
+
+
+           
+            return View(unapproved_list);
+        }
+
+
+        [HttpPost]
+        public IActionResult Delete(string userId)
+        {
+            var objFromDb = _db.ApplicationUser.FirstOrDefault(u => u.Id == userId);
+            if (objFromDb == null)
+            {
+                return NotFound();
+            }
+            _db.ApplicationUser.Remove(objFromDb);
+            _db.SaveChanges();
+            TempData[SD.Success] = "User rejected succesfully";
+            return RedirectToAction("list", "Participant");
+        }
+
+
+        [HttpPost]
+        public IActionResult Approve(string userId)
+        {
+            var objFromdb = _db.ApplicationUser.FirstOrDefault(u => u.Id == userId);
+            if (objFromdb == null)
+            {
+                return NotFound();
+            }
+
+            if (objFromdb.isApproved == false)
+            {
+                //sends an email to admin requesting approval for new user
+                var email = objFromdb.Email;
+                var subject = "Accepted";
+                var body = "<a href='https://localhost:44316/Account/Login'>Click here to sign in </a>";
+                var mailHelper = new MailHelper(_configuration);
+                mailHelper.Send(_configuration["Gmail:Username"], email, subject, body);
+                objFromdb.isApproved = true;
+                TempData[SD.Success] = "User approved successfully.";
+            }
+
+
+            _db.SaveChanges();
+            return RedirectToAction("pending", "Participant");
+        }
     }
 }

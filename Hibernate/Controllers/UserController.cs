@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace NewSwift.Controllers
 {
     public class UserController : Controller
@@ -21,14 +22,18 @@ namespace NewSwift.Controllers
         private readonly ApplicationDbContext _db;
         private IConfiguration _configuration;
         private IWebHostEnvironment _webHostEnvironment;
+        SignInManager<ApplicationUser> _signInManager;
+        RoleManager<IdentityRole> _roleManager;
 
         public UserController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, 
-            IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+            IConfiguration configuration, IWebHostEnvironment webHostEnvironment, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _db = db;
             _configuration = configuration;
             _webHostEnvironment = webHostEnvironment;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
 
@@ -49,7 +54,18 @@ namespace NewSwift.Controllers
                 {
                     user.Role = roles.FirstOrDefault(u => u.Id == role.RoleId).Name;
                 }
+                if(user.Role == "Group Leader")
+                {
+                    user.GroupId = _db.GroupLeaders.Where(u => u.UserId == user.Id).Select(e => e.GroupId).FirstOrDefault();
+                    user.GroupName = _db.Groups.Where(u => u.GroupId == user.GroupId).Select(e => e.Name).FirstOrDefault();
+                }
+                if (user.Role == "Participant")
+                {
+                    user.GroupId = _db.Participants.Where(u => u.UserId == user.Id).Select(e => e.GroupId).FirstOrDefault();
+                    user.GroupName = _db.Groups.Where(u => u.GroupId == user.GroupId).Select(e => e.Name).FirstOrDefault();
+                }
             }
+            
 
             return View(userList);
 
@@ -82,6 +98,8 @@ namespace NewSwift.Controllers
 
             return View(objFromDb);
         }
+
+
 
 
         [HttpPost]
@@ -147,6 +165,9 @@ namespace NewSwift.Controllers
             return View(user);
         }
 
+
+
+
         [HttpPost]
         public IActionResult LockUnlock(string userId)
         {
@@ -173,6 +194,9 @@ namespace NewSwift.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
+
         [HttpPost]
         public IActionResult Delete(string userId)
         {
@@ -187,6 +211,8 @@ namespace NewSwift.Controllers
             TempData[SD.Success] = "User deleted succesfully";
             return RedirectToAction(nameof(Index));
         }
+
+
 
 
         [HttpGet]
@@ -207,6 +233,10 @@ namespace NewSwift.Controllers
             }
             return View();
         }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -232,6 +262,12 @@ namespace NewSwift.Controllers
 
             if (ModelState.IsValid)
             {
+                if(obj.GroupSelected == null)
+                {
+                    ModelState.AddModelError("", "You must select a group.");
+                    return View(obj);
+                }
+
                 //object created by user input
                 ApplicationUser user = new ApplicationUser()
                 {
@@ -242,7 +278,6 @@ namespace NewSwift.Controllers
                     Email = obj.Email,
                     isApproved = true,
                     PasswordDate = DateTime.Now,
-                    groupName= obj.GroupSelected
 
                 };
                 var id = user.Id;
@@ -250,10 +285,21 @@ namespace NewSwift.Controllers
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
-
+                var groupId = _db.Groups.Where(u => u.Name == obj.GroupSelected).Select(e => e.GroupId).FirstOrDefault();
 
                 if (result.Succeeded)
                 {
+
+                    var partToAdd = new Participant
+                    {
+                        UserId = user.Id,
+                        GroupId = groupId
+                    };
+
+                    _db.Participants.Add(partToAdd);
+                    _db.SaveChanges();
+
+
                     await _userManager.AddToRoleAsync(user, "Participant");                 
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -276,6 +322,10 @@ namespace NewSwift.Controllers
             return View(obj);
         }
 
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> CreateGL()
         {
@@ -294,6 +344,10 @@ namespace NewSwift.Controllers
             }
             return View();
         }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -319,6 +373,11 @@ namespace NewSwift.Controllers
 
             if (ModelState.IsValid)
             {
+                if (obj.GroupSelected == null)
+                {
+                    ModelState.AddModelError("", "You must select a group.");
+                    return View(obj);
+                }
                 //object created by user input
                 ApplicationUser user = new ApplicationUser()
                 {
@@ -329,18 +388,30 @@ namespace NewSwift.Controllers
                     Email = obj.Email,
                     isApproved = true,
                     PasswordDate = DateTime.Now,
-                    groupName = obj.GroupSelected
 
                 };
+                
+                var groupId = _db.Groups.Where(u => u.Name == obj.GroupSelected).Select(e => e.GroupId).FirstOrDefault();
+
                 var id = user.Id;
 
 
                 //creates user
                 var result = await _userManager.CreateAsync(user, obj.Password);
+                //creates user
+               
 
-
-                if (result.Succeeded)
+                if (result.Succeeded && User.IsInRole("Admin"))
                 {
+                    var GLToAdd = new GroupLeader
+                    {
+                        UserId = user.Id,
+                        GroupId = groupId
+                    };
+
+                    _db.GroupLeaders.Add(GLToAdd);
+                    _db.SaveChanges();
+
                     await _userManager.AddToRoleAsync(user, "Group Leader");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -354,6 +425,30 @@ namespace NewSwift.Controllers
                     return RedirectToAction("Index", "User");
 
                 }
+                else if (result.Succeeded && User.IsInRole("Sales Rep"))
+                {
+                    var GLToAdd = new GroupLeader
+                    {
+                        UserId = user.Id,
+                        GroupId = groupId
+                    };
+
+                    _db.GroupLeaders.Add(GLToAdd);
+                    _db.SaveChanges();
+
+                    await _userManager.AddToRoleAsync(user, "Group Leader");
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var Email = obj.Email;
+                    var subject = "Account Confirmation";
+                    var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
+                    var mailHelper = new MailHelper(_configuration);
+                    mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
+                    TempData[SD.Success] = "Account Created";
+                    return RedirectToAction("SRIndex", "Groups");
+
+                }
                 else
                 {
                     ModelState.AddModelError("", "An account with the entered email already exists.");
@@ -362,6 +457,11 @@ namespace NewSwift.Controllers
             }
             return View(obj);
         }
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> CreateSR()
         {
@@ -380,6 +480,10 @@ namespace NewSwift.Controllers
             }
             return View();
         }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -416,7 +520,8 @@ namespace NewSwift.Controllers
                 {
                     var repToAdd = new SalesRep
                     {
-                        UserId = user.Id
+                        UserId = user.Id,
+                        Name = obj.FirstName + " " + obj.LastName
                     };
 
                     _db.SalesReps.Add(repToAdd);

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hibernate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211006160659_dbconfig")]
-    partial class dbconfig
+    [Migration("20211128222255_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,6 +51,116 @@ namespace Hibernate.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("Hibernate.Models.GroupLeader", b =>
+                {
+                    b.Property<int>("GroupLeaderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GroupLeaderId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupLeaders");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Item", b =>
+                {
+                    b.Property<int>("ItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("ItemId");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupporterId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("float");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.HasIndex("SupporterId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Order_Item", b =>
+                {
+                    b.Property<int>("OrderItemsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemsId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Order_Items");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Participant", b =>
+                {
+                    b.Property<int>("ParticipantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ParticipantId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Participants");
+                });
+
             modelBuilder.Entity("Hibernate.Models.SalesRep", b =>
                 {
                     b.Property<int>("SalesRepId")
@@ -66,6 +176,32 @@ namespace Hibernate.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SalesReps");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Supporter", b =>
+                {
+                    b.Property<int>("SupporterId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SupporterId");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.ToTable("Supporters");
                 });
 
             modelBuilder.Entity("Hibernate.Models.ViewModels.ApplicationUser", b =>
@@ -137,9 +273,6 @@ namespace Hibernate.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("groupName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("isApproved")
                         .HasColumnType("bit");
@@ -299,11 +432,84 @@ namespace Hibernate.Migrations
                     b.Navigation("SalesRep");
                 });
 
+            modelBuilder.Entity("Hibernate.Models.GroupLeader", b =>
+                {
+                    b.HasOne("Hibernate.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Order", b =>
+                {
+                    b.HasOne("Hibernate.Models.Group", "Groups")
+                        .WithMany()
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("Hibernate.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantId");
+
+                    b.HasOne("Hibernate.Models.Supporter", "Supporter")
+                        .WithMany()
+                        .HasForeignKey("SupporterId");
+
+                    b.Navigation("Groups");
+
+                    b.Navigation("Participant");
+
+                    b.Navigation("Supporter");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Order_Item", b =>
+                {
+                    b.HasOne("Hibernate.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hibernate.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Participant", b =>
+                {
+                    b.HasOne("Hibernate.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("Hibernate.Models.SalesRep", b =>
                 {
                     b.HasOne("Hibernate.Models.ViewModels.ApplicationUser", null)
                         .WithMany("SalesReps")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Hibernate.Models.Supporter", b =>
+                {
+                    b.HasOne("Hibernate.Models.Participant", "Participant")
+                        .WithMany()
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Participant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

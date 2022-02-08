@@ -111,6 +111,7 @@ namespace Hibernate.Controllers
                     var curr_user = await _userManager.FindByNameAsync(obj.Email);
                     var admin_role_list = await _userManager.GetUsersInRoleAsync("Admin");
                     var sr_role_list = await _userManager.GetUsersInRoleAsync("Sales Rep");
+                    var gl_role_list = await _userManager.GetUsersInRoleAsync("Group Leader");
                     var participant_role_list = await _userManager.GetUsersInRoleAsync("Participant");
 
                     if (curr_user.isApproved == true && admin_role_list.Contains(curr_user))
@@ -122,6 +123,10 @@ namespace Hibernate.Controllers
                     {
                         
                         return RedirectToAction("Index", "SalesRep");
+                    }
+                    else if (curr_user.isApproved == true && gl_role_list.Contains(curr_user))
+                    {
+                        return RedirectToAction("Index", "GroupLeader");
                     }
                     else if (curr_user.isApproved == true && participant_role_list.Contains(curr_user))
                     {
@@ -140,6 +145,33 @@ namespace Hibernate.Controllers
                 }
             }
             return View(obj);
+        }
+        public IActionResult HomeRedirect()
+        {
+            if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Sales Rep"))
+            {
+                return RedirectToAction("Index", "SalesRep");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group Leader"))
+            {
+                return RedirectToAction("Index", "GroupLeader");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
+            {
+                return RedirectToAction("Index", "Participant");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Unapproved"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         [HttpGet]
@@ -171,6 +203,7 @@ namespace Hibernate.Controllers
             string _Lastname = obj.LastName.ToLower();
 
             var groupList = _db.Groups.ToList();
+
             List<SelectListItem> groups = new List<SelectListItem>();
             foreach (var group in groupList)
             {
@@ -195,9 +228,7 @@ namespace Hibernate.Controllers
                     LastName = obj.LastName,
                     Email = obj.Email,
                     isApproved = false,
-                    PasswordDate = DateTime.Now,
-                    groupName = obj.GroupSelected
-                    
+                    PasswordDate = DateTime.Now,                    
                     
                 };
                 var id = user.Id;
@@ -209,7 +240,20 @@ namespace Hibernate.Controllers
 
                 if (result.Succeeded)
                 {
-
+                    Participant newParticipant = new Participant
+                    {
+                        UserId = user.Id
+                    };
+                    foreach (var group in groupList)
+                    {
+                        if(group.Name == obj.GroupSelected)
+                        {
+                            newParticipant.Group = group;
+                            newParticipant.GroupId = group.GroupId;
+                            break;
+                        }
+                    }
+                    
                     
                     await _userManager.AddToRoleAsync(user, "Participant");                  
 
@@ -220,9 +264,12 @@ namespace Hibernate.Controllers
 
                     var Email = obj.Email;
                     var subject = "Account Confirmation";
-                    var body = "Please confirm you account by clicking <a href=\"" + callbackurl + "\"> here";
+                    var body = "Please confirm your account by clicking <a href=\"" + callbackurl + "\"> here </a>.";
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
+
+                    _db.Participants.Add(newParticipant);
+                    _db.SaveChanges();
 
                     TempData[SD.Success] = "Account Created. Awaiting approval.";
                     return RedirectToAction("Login", "Account");
@@ -288,7 +335,7 @@ namespace Hibernate.Controllers
 
             var toEmail = obj.ToEmail;
             var subject = "Password Reset Confirmation";
-            var body = "Please reset your password by clicking <a href=\"" + callbackurl + "\"> here";
+            var body = "Please reset your password by clicking <a href=\"" + callbackurl + "\"> here</a>.";
             var mailHelper = new MailHelper(_configuration);
             mailHelper.Send(_configuration["Gmail:Username"], toEmail, subject, body);
 

@@ -1,39 +1,84 @@
 ﻿@model Hibernate.Models.ViewModels.ApplicationUser
-<h1 class="text-info">Edit User</h1>
-<div class="row">
-    <div class="col-md-8">
-        <form method="post" asp-action="Edit">
-            <input asp-for="@Model.Id" hidden />
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName">First Name</label>
-                <input asp-for="FirstName" class="form-control" />
+<h2 class="text-center">Edit User</h2>
 
+
+<div class="sidebar-container border-info">
+    <div>
+        <br />
+        <div class="text-center">Quick Actions</div>
+        <br />
+    </div>
+
+    <ul class="sidebar-navigation">
+
+        <li>
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-dark btn-outline-info">
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
+                Pending Approval
+            </a>
+        </li>
+        <li>
+            <a asp-controller="User" asp-action="Index" class="btn btn-info btn-outline-light">Users List</a>
+        </li>
+        <li>
+            <a asp-controller="Groups" asp-action="AdminIndex" class="btn btn-dark btn-outline-info">Groups List</a>
+        </li>
+        <li>
+            <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
+        </li>
+    </ul>
+</div>
+
+
+<div id="centerform1">
+    <form method="post" asp-action="Edit">
+        <input asp-for="@Model.Id" hidden />
+        
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-lg-6">
+                <label asp-for="FirstName">First Name:</label>
+                <input asp-for="FirstName" class="form-control" />
             </div>
-            <div class="form-group">
-                <label asp-for="LastName">Last Name</label>
+            <div class="col-lg-6">
+                <label asp-for="LastName">Last Name:</label>
                 <input asp-for="LastName" class="form-control" />
-            </div>           
-            <div class="form-group">
-                <label asp-for="Email"></label>
+            </div>
+
+        </div>
+        
+        <div class="form-group row">
+            <div class="col-lg-12">
+                <label asp-for="Email">Email:</label>
                 <input asp-for="Email" readonly class="form-control" />
                 <input asp-for="Email" hidden class="form-control" />
-                @*can check if email has been used but needs to be implemented*@
-                @*<span asp-validation-for="Email" class="text-danger"></span>*@
             </div>
-            <div class="form-group">
-                <label asp-for="RoleId"></label>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-12">
+                <label asp-for="RoleId">Role:</label>
                 @*Might be form select with the newer bootstrap*@
                 <select asp-for="RoleId" asp-items="@Model.RoleList" class="form-control">
                     <option disabled selected>--Select Role--</option>
                 </select>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-success">Update</button>
-                @*link to go back*@
-                <a asp-action="Index" class="btn btn-warning" style="width:auto">Back to User</a>
-            </div>
-        </form>
-    </div>
+           
+        </div>
+        <br />
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Update</button>
+            @*link to go back*@
+            <a asp-action="Index" class="btn btn-warning" style="width:auto">Back to List</a>
+        </div>
+    </form>
 </div>
+
+
+
+
+

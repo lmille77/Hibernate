@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hibernate.Models.ViewModels.ApplicationUser>
+﻿@model Hibernate.Models.ViewModels.Groups
 @{
     ViewData["Title"] = "Admin Page";
 }
@@ -6,519 +6,100 @@
 
 
 
-<html>
-<head>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Sales during the week', 'Sales per thousand made every day of the week'],
-                ['Monday', 11],
-                ['Tuesday', 14],
-                ['Wednesday', 13],
-                ['Thursday', 16],
-                ['Friday', 20]
-            ]);
-
-            var options = {
-                title: 'Weekly sales',
-                is3D: true,
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-            chart.draw(data, options);
-        }
-    </script>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Year', 'Assets', 'Liabilities'],
-                ['2004', 1000, 400],
-                ['2005', 1170, 460],
-                ['2006', 660, 1120],
-                ['2007', 1030, 540]
-            ]);
-
-            var options = {
-                title: 'Company Performance',
-                curveType: 'function',
-                legend: { position: 'bottom' }
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-            chart.draw(data, options);
-        }
-    </script>
-
-</head>
-<body>
-    <br />
-    <h2 class="text-center" style="margin-left:50px">Admin Overview</h2>
-    <br />
-    <div class="sidebar-container border-info">
-        <div>
-            <br />
-            <div class="text-center">Quick Actions</div>
-            <br />
-        </div>
-
-        <ul class="sidebar-navigation">
-            @*<li>
-            <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
-        </li>*@
-            <li>
-                <a asp-controller="Admin" asp-action="Index" class="btn btn-info btn-outline-light">
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
-                    Pending Approvals
-                </a>
-            </li>
-            <li>
-                <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
-            </li>
-            <li>
-                <a asp-controller="Groups" asp-action="AdminIndex" class="btn btn-dark btn-outline-info">Groups List</a>
-            </li>
-            <li>
-                <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
-            </li>
-            @*<li>
-            <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
-        </li>*@
-        </ul>
+<h2 class="text-center">Admin Overview</h2>
+<br />
+<div class="sidebar-container border-info">
+    <div>
+        <br />
+        <div class="text-center">Quick Actions</div>
+        <br />
     </div>
 
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    
-    <div style="margin-left: 150px; border: 1px solid; border-color: lightgray;">
-        <div style="margin-left: 50px; margin-right:50px;margin-top:50px;margin-bottom:50px">
-            <div class="row">
-                <!-- Column -->
-                <div class="col-md-6 col-lg-3 col-xlg-3">
-                    <div class="card">
-                        <div class="box p-2 rounded bg-info text-center">
-                            <h1 class="fw-light text-white">$15,064</h1>
-                            <h6 class="text-white">Todays Sales</h6>
-                        </div>
-                    </div>
-                </div>
-                <!-- Column -->
-                <div class="col-md-6 col-lg-3 col-xlg-3">
-                    <div class="card">
-                        <div class="box p-2 rounded bg-info text-center">
-                            <h1 class="fw-light text-white">$4,738</h1>
-                            <h6 class="text-white">Largest Sale</h6>
-                        </div>
-                    </div>
-                </div>
-                <!-- Column -->
-                <div class="col-md-6 col-lg-3 col-xlg-3">
-                    <div class="card">
-                        <div class="box p-2 rounded bg-info text-center">
-                            <h1 class="fw-light text-white">$29,963</h1>
-                            <h6 class="text-white">Weekly Sales</h6>
-                        </div>
-                    </div>
-                </div>
-                <!-- Column -->
-                <div class="col-md-6 col-lg-3 col-xlg-3">
-                    <div class="card">
-                        <div class="box p-2 rounded bg-info text-center">
-                            <h1 class="fw-light text-white">$55,372</h1>
-                            <h6 class="text-white">Year Sales</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-1">
-                <div class="segment">
-
-                    <!--Add Chart Here-->
-                    <div id="piechart_3d" style="width: 500px; height: 300px; align-content: center"></div>
-                    <!--End of the Chart-->
-                </div>
-                <div class="segment">
-                    <!-- Add line graph here-->
-                    <div id="curve_chart" style="width: 475px; height: 300px; align-content: center"></div>
-                    <!--End of the Chart-->
-                </div>
-            </div>
+    <ul class="sidebar-navigation">
+        @*<li>
+                <a asp-action="Send" class="btn btn-dark btn-outline-info">Send Message </a>
+            </li>*@
+        <li>
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-info btn-outline-light">
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a asp-controller="Unapprovedusers" asp-action="Index" class="btn btn-dark btn-outline-info">
+                Pending Approval
+            </a>
+        </li>
+        <li>
+            <a asp-controller="User" asp-action="Index" class="btn btn-dark btn-outline-info">Users List</a>
+        </li>
+        <li>
+            <a asp-controller="Groups" asp-action="AdminIndex" class="btn btn-dark btn-outline-info">Groups List</a>
+        </li>
+        <li>
+            <a a asp-controller="Roles" asp-action="Index" class="btn btn-dark btn-outline-info">Roles List</a>
+        </li>
+        @*<li>
+                <a asp-controller="expiredpass" asp-action="Index" class="btn btn-dark btn-outline-info">Expired Passwords List</a>
+            </li>*@
+    </ul>
+</div>
 
 
-            <!-- Row -->
-            <div class="row">
-                <div class="col-lg-4 d-flex align-items-stretch">
-                    <div class="card w-100">
-                        <div class="card-body">
-                            <h2 class="card-title"><b>Today's Schedule</b></h2>
-                            <h5 class="card-subtitle pb-3">
-                                Check out your daily schedule
-                            </h5>
+<br />
+<br />
 
-                            <form action="/action_page.php" method="get">
-                                <input type="checkbox" name="check1" value="Sales">
-                                <label for="check1">Check Sales</label><br>
-                                <input type="checkbox" name="check2" value="Meeting">
-                                <label for="check2">Tell Clark about the meeting</label><br>
-                                <input type="checkbox" name="check3" value="Solve">
-                                <label for="check3">Make phone calls to customers</label><br>
-                                <input type="checkbox" name="check4" value="Approve">
-                                <label for="check4">Approve meeting with Tiger</label><br>
-                                <input type="checkbox" name="check5" value="Call">
-                                <label for="check5">Call today with John Doe</label><br><br>
-                                <input type="submit" value="Submit">
-
-                            </form>
-                            @* <div class="steamline mt-4">
-                                <div class="sl-item">
-                                    <div class="sl-left bg-success">
-                                        <i class="ti-user"></i>
-                                    </div>
-                                    <div class="sl-right">
-                                        <div class="font-weight-medium">
-                                            Meeting today <span class="sl-date"> 5pm</span>
-                                        </div>
-                                        <div class="desc">Check Sales</div>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left bg-info">
-                                        <i class="fa fa-image"></i>
-                                    </div>
-                                    <div class="sl-right">
-                                        <div class="font-weight-medium">
-                                            - Send documents to Clark
-                                        </div>
-                                        <div class="desc">Tell Clark about the meeting</div>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left">
-                                        <img class="rounded-circle"
-                                             alt="user"
-                                             src="../../assets/images/users/1.jpg" />
-                                    </div>
-                                    <div class="sl-right">
-                                        <div>
-                                            <a href="#">Gohn Doe</a>
-                                            <span class="sl-date">5 minutes ago</span>
-                                        </div>
-                                        <div class="desc">Call today with John Doe</div>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left">
-                                        <img class="rounded-circle"
-                                             alt="user"
-                                             src="../../assets/images/users/2.jpg" />
-                                    </div>
-                                    <div class="sl-right">
-                                        <div class="font-weight-medium">
-                                            Go to the Doctor
-                                            <span class="sl-date">5 minutes ago</span>
-                                        </div>
-                                        <div class="desc">- Make phone calls to solve customers delivery issues</div>
-                                    </div>
-                                </div>
-                                <div class="sl-item">
-                                    <div class="sl-left">
-                                        <img class="rounded-circle"
-                                             alt="user"
-                                             src="../../assets/images/users/3.jpg" />
-                                    </div>
-                                    <div class="sl-right">
-                                        <div>
-                                            <a href="#">Tiger Sroff</a>
-                                            <span class="sl-date">5 minutes ago</span>
-                                        </div>
-                                        <div class="desc">
-                                            - Approve meeting with Tiger <br /><a href="javascript:void(0)"
-                                                                                  class="
-                                  btn
-                                  mt-2
-                                  me-1
-                                  btn-rounded btn-outline-success
-                                ">Approve</a>
-                                            <a href="javascript:void(0)"
-                                               class="btn mt-2 btn-rounded btn-outline-danger">Refuse</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> *@
-                        </div>
-                    </div>
-                </div>
-                <!-- Column -->
-                <div class="col-lg-8 d-flex align-items-stretch">
-                    <div class="card w-100">
-                        <div class="card-body">
-                            <div class="d-md-flex no-block">
-                                <div>
-                                    <h4 class="card-title">Sales Overview</h4>
-                                    <h6 class="card-subtitle">Check the monthly sales</h6>
-                                </div>
-                                <div class="ms-auto">
-                                    <select class="form-select">
-                                        <option selected="">January</option>
-                                        <option value="1">February</option>
-                                        <option value="2">March</option>
-                                        <option value="3">April</option>
-                                        <option value="4">May</option>
-                                        <option value="4">June</option>
-                                        <option value="4">July</option>
-                                        <option value="4">August</option>
-                                        <option value="4">September</option>
-                                        <option value="4">October</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body bg-light">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h2 class="mb-0">January 2021</h2>
-                                    <h5 class="fw-light mt-0 text-muted">
-                                        Report for this month
-                                    </h5>
-                                </div>
-                                <div class="
-                        col-md-6
-                        align-self-center
-                        display-6
-                        text-info text-start text-md-end
-                      ">
-                                    $3,690
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center border-0">#</th>
-                                        <th class="border-0">NAME</th>
-                                        <th class="border-0">STATUS</th>
-                                        <th class="border-0">DATE</th>
-                                        <th class="border-0">PRICE</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td class="fw-normal text-muted">Elite admin</td>
-                                        <td><span class="badge bg-success py-1">SALE</span></td>
-                                        <td class="fw-normal text-muted">January 18, 2021</td>
-                                        <td>
-                                            <span class="text-success">
-                                                $24 <i class="fas fa-caret-up"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">2</td>
-                                        <td class="fw-normal text-muted">
-                                            Real Homes WP Theme
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info py-1">EXTENDED</span>
-                                        </td>
-                                        <td class="fw-normal text-muted">January 19, 2021</td>
-                                        <td>
-                                            <span class="text-info">
-                                                $1250 <i class="fas fa-caret-up"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">3</td>
-                                        <td class="fw-normal text-muted">Ample Admin</td>
-                                        <td>
-                                            <span class="badge bg-info py-1">EXTENDED</span>
-                                        </td>
-                                        <td class="fw-normal text-muted">January 19, 2021</td>
-                                        <td>
-                                            <span class="text-info">
-                                                $1250 <i class="fas fa-caret-up"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">4</td>
-                                        <td class="fw-normal text-muted">
-                                            Medical Pro WP Theme
-                                        </td>
-                                        <td><span class="badge bg-danger py-1">TAX</span></td>
-                                        <td class="fw-normal text-muted">January 20, 2021</td>
-                                        <td>
-                                            <span class="text-danger">
-                                                -$24 <i class="fas fa-caret-down"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">5</td>
-                                        <td class="fw-normal text-muted">Hosting press html</td>
-                                        <td><span class="badge bg-warning py-1">SALE</span></td>
-                                        <td class="fw-normal text-muted">January 21, 2021</td>
-                                        <td>
-                                            <span class="text-success">
-                                                $24 <i class="fas fa-caret-up"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">6</td>
-                                        <td class="fw-normal text-muted">Digital Agency PSD</td>
-                                        <td><span class="badge bg-success py-1">SALE</span></td>
-                                        <td class="fw-normal text-muted">January 23, 2021</td>
-                                        <td>
-                                            <span class="text-danger">
-                                                -$14 <i class="fas fa-caret-down"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">7</td>
-                                        <td class="fw-normal text-muted">Elite admin</td>
-                                        <td><span class="badge bg-success py-1">SALE</span></td>
-                                        <td class="fw-normal text-muted">January 25, 2021</td>
-                                        <td>
-                                            <span class="text-success">
-                                                $24 <i class="fas fa-caret-up"></i>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <!-- Column -->
-            </div>
-            <!-- Row -->
-        </div>
-    </div>
-    <br />
- 
-
-
-
-</body>
-
-</html>
-<!-- ============================================================== -->
-<!-- End Container fluid  -->
-<!-- ============================================================== -->
-
-
-<style>
-    .sidebar-container {
-        position: absolute;
-        width: 250px;
-        height: 95%;
-        left: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        background: #36454F;
-        color: #fff;
-        top: 57px;
-        border-style: solid;
-    }
-
-    .content-container {
-        padding-top: 20px;
-    }
-
-    .sidebar-logo {
-        padding: 10px 15px 10px 30px;
-        font-size: 20px;
-        background-color: #2574A9;
-    }
-
-    .sidebar-navigation {
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-        position: relative;
-    }
-
-        .sidebar-navigation li {
-            background-color: transparent;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            line-height: 20px;
-        }
-
-            .sidebar-navigation li a {
-                padding: 10px 15px 10px 30px;
-                display: block;
-                color: #fff;
+<div class="container-fluid">
+    <table class="table" id="table"
+           data-toggle="table"
+           data-search="true"
+           data-filter-control="true">
+        <thead>
+            <tr>
+                <th data-field="groupName" data-sortable="true">
+                    Group Name
+                </th>
+                <th data-field="bedSheets" data-sortable="true">
+                    Bed Sheets
+                </th>
+                <th data-field="pillowCases" data-sortable="true">
+                    Pillow Cases
+                </th>
+                <th data-field="total" data-sortable="true">
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Gs)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.BedSheets
+                    </td>
+                    <td>
+                        @item.PillowCases
+                    </td>
+                    <td style="vertical-align: top; text-align:right">
+                        @item.Total.ToString("C")
+                    </td>
+                </tr>
             }
+        </tbody>
+    </table>
+    <table class="table">
+        <tr class="table-secondary">
+            <th style="text-align:left">Total</th>
+            <td style="text-align:right;">@Model.GTotal.ToString("C")</td>
+        </tr>
+    </table>
+</div>
 
-            .sidebar-navigation li .fa {
-                margin-right: 10px;
-            }
-
-            .sidebar-navigation li a:active,
-            .sidebar-navigation li a:hover,
-            .sidebar-navigation li a:focus {
-                text-decoration: none;
-                outline: none;
-            }
-
-            .sidebar-navigation li::before {
-                background-color: #2574A9;
-                position: absolute;
-                content: '';
-                height: 100%;
-                left: 0;
-                top: 0;
-                -webkit-transition: width 0.2s ease-in;
-                transition: width 0.2s ease-in;
-                width: 3px;
-                z-index: -1;
-            }
-
-            .sidebar-navigation li:hover::before {
-                width: 100%;
-            }
-
-        .sidebar-navigation .header {
-            font-size: 12px;
-            text-transform: uppercase;
-            background-color: #151515;
-            padding: 10px 15px 10px 30px;
-        }
-
-            .sidebar-navigation .header::before {
-                background-color: transparent;
-            }
-
-    .content-container {
-        padding-left: 220px;
-    }
-
-    .container-1 {
-        display: flex;
-    }
-
-    .segment {
-        width: 50%
-    }
-</style>
+<link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/filter-control/utils.min.js"></script>

@@ -31,8 +31,26 @@ namespace Hibernate.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            var part_list = _db.Participants.ToList();
             var all_users = await _userManager.GetUsersInRoleAsync("Participant");
-            return View(all_users);
+            List<ApplicationUser> unapproved_list = new List<ApplicationUser>();
+
+            foreach(var user in all_users)
+            {
+                if(user.isApproved == false)
+                {
+                    unapproved_list.Add(user);
+                }
+            }
+
+
+            foreach(var user in unapproved_list)
+            {
+                user.GroupId = _db.Participants.Where(u => u.UserId == user.Id).Select(e => e.GroupId).FirstOrDefault();
+                user.GroupName = _db.Groups.Where(u => u.GroupId == user.GroupId).Select(e => e.Name).FirstOrDefault();
+
+            }
+            return View(unapproved_list);
         }
 
 
