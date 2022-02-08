@@ -6,25 +6,45 @@
 <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/filter-control/utils.min.js"></script>
 
+<div class="sidebar-container border-info">
+    <div>
+        <br />
+        <div class="text-center">Quick Actions</div>
+        <br />
+    </div>
+
+    <ul class="sidebar-navigation">
+        
+        <li>
+            <a asp-controller="GroupLeader" asp-action="Index" class="btn btn-dark btn-outline-info">Dashboard</a>
+        </li>
+        
+        <li>
+            <a asp-controller="Participant" asp-action="List" class="btn btn-info btn-outline-light">Participant List</a>
+        </li>
+        <li>
+            <a asp-controller="Participant" asp-action="Pending" class="btn btn-dark btn-outline-info">Pending Users</a>
+        </li>
+    </ul>
+</div>
 
 <br />
-<div>
-    <div class="col-6">
-        <h2 class="text-primary">Participants List</h2>
-
-    </div>
-    <div class="col-6 text-lg-right">
-        <a asp-action="Upsert" asp-controller="Participant" class="btn btn-primary"> Create New User</a>
-    </div>
+<h2 class="text-center">Participants List</h2>
+<br />
+<div class="text-center">
+    <a asp-action="Upsert" asp-controller="Participant" class="btn btn-primary">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        Create New User
+    </a>
 </div>
 
 <div class="container-fluid">
     @if (Model.Count() > 0)
     {
         <table class="table" id="table"
-       data-toggle="table"
-       data-search="true"
-       data-filter-control="true">
+               data-toggle="table"
+               data-search="true"
+               data-filter-control="true">
             <thead class="">
                 <tr class="table">
 
@@ -40,7 +60,7 @@
             </thead>
             @foreach (var item in Model)
             {
-              
+
                 <tr>
                     <td>
                         @item.Email
@@ -80,7 +100,7 @@
                         </div>
                     </td>
                 </tr>
-             
+
             }
         </table>
     }

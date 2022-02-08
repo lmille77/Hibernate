@@ -146,6 +146,33 @@ namespace Hibernate.Controllers
             }
             return View(obj);
         }
+        public IActionResult HomeRedirect()
+        {
+            if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Sales Rep"))
+            {
+                return RedirectToAction("Index", "SalesRep");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Group Leader"))
+            {
+                return RedirectToAction("Index", "GroupLeader");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Participant"))
+            {
+                return RedirectToAction("Index", "Participant");
+            }
+            else if (_signInManager.IsSignedIn(User) && User.IsInRole("Unapproved"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> Register(string returnurl = null)
@@ -237,7 +264,7 @@ namespace Hibernate.Controllers
 
                     var Email = obj.Email;
                     var subject = "Account Confirmation";
-                    var body = "Please confirm your account by clicking <a href=\"" + callbackurl + "\"> here.";
+                    var body = "Please confirm your account by clicking <a href=\"" + callbackurl + "\"> here </a>.";
                     var mailHelper = new MailHelper(_configuration);
                     mailHelper.Send(_configuration["Gmail:Username"], Email, subject, body);
 
@@ -308,7 +335,7 @@ namespace Hibernate.Controllers
 
             var toEmail = obj.ToEmail;
             var subject = "Password Reset Confirmation";
-            var body = "Please reset your password by clicking <a href=\"" + callbackurl + "\"> here";
+            var body = "Please reset your password by clicking <a href=\"" + callbackurl + "\"> here</a>.";
             var mailHelper = new MailHelper(_configuration);
             mailHelper.Send(_configuration["Gmail:Username"], toEmail, subject, body);
 

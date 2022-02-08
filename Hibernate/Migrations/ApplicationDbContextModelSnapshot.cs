@@ -94,8 +94,8 @@ namespace Hibernate.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ParticipantId")
                         .HasColumnType("int");
@@ -107,6 +107,8 @@ namespace Hibernate.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("ParticipantId");
 
@@ -441,6 +443,10 @@ namespace Hibernate.Migrations
 
             modelBuilder.Entity("Hibernate.Models.Order", b =>
                 {
+                    b.HasOne("Hibernate.Models.Group", "Groups")
+                        .WithMany()
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("Hibernate.Models.Participant", "Participant")
                         .WithMany()
                         .HasForeignKey("ParticipantId");
@@ -448,6 +454,8 @@ namespace Hibernate.Migrations
                     b.HasOne("Hibernate.Models.Supporter", "Supporter")
                         .WithMany()
                         .HasForeignKey("SupporterId");
+
+                    b.Navigation("Groups");
 
                     b.Navigation("Participant");
 

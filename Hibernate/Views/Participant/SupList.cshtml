@@ -8,7 +8,27 @@
 <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/filter-control/utils.min.js"></script>
 <br />
-<div class="container-fluid" style="width: 1100px; margin-left:125px;">
+
+<div class="sidebar-container border-info">
+    <div>
+        <br />
+        <div class="text-center">Quick Actions</div>
+        <br />
+    </div>
+   
+    <ul class="sidebar-navigation">
+        <li>
+            <a asp-controller="Participant" asp-action="Index" class=" btn btn-dark btn-outline-info">Dashboard</a>
+        </li>
+        <li>
+            <a asp-controller="Participant" asp-action="SupList" class="btn btn-info btn-outline-light">Supporters List</a>
+        </li>
+    </ul>
+</div>
+
+
+
+<div class="container-fluid">
     <table class="table table-striped border" id="table"
            data-toggle="table"
            data-search="true"

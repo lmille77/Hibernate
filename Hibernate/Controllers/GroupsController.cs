@@ -11,13 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Hibernate.Models.ViewModels;
+using Hibernate.Helpers;
 
 namespace Hibernate.Controllers
 {
     public class GroupsController : Controller
     {
-        
 
+        private readonly ApplicationDbContext _db;
         private IConfiguration _configuration;
         private IWebHostEnvironment _webHostEnvironment;
 
@@ -46,7 +47,25 @@ namespace Hibernate.Controllers
         // GET: Groups
         public async Task<IActionResult> SRIndex()
         {
-            return View(await _context.Groups.ToListAsync());
+            var id = _userManager.GetUserId(User);
+            var gList = _context.Groups.ToList();
+            var sId = _context.SalesReps.Where(u => u.UserId == id).Select(u => u.SalesRepId).FirstOrDefault();
+
+            List<Group> groups = new List<Group>();
+            
+            foreach(var item in gList)
+            {
+                if(item.SalesRepId == sId)
+                {
+                    groups.Add(item);
+                }
+            }
+            foreach(var item in groups)
+            {
+                var userid = _context.GroupLeaders.Where(u => u.GroupId == item.GroupId).Select(e => e.UserId).FirstOrDefault();
+                item.GroupLeader = _context.ApplicationUser.Where(u => u.Id == userid).Select(e => e.FirstName + " " + e.LastName).FirstOrDefault();
+            }
+            return View(groups);
         }
         
         
@@ -68,9 +87,9 @@ namespace Hibernate.Controllers
                 {
                     item.SalesRepName = "None";
                 }
-               
-            }
-
+                var userid = _context.GroupLeaders.Where(u => u.GroupId == item.GroupId).Select(e => e.UserId).FirstOrDefault();
+                item.GroupLeader = _context.ApplicationUser.Where(u => u.Id == userid).Select(e => e.FirstName + " " + e.LastName).FirstOrDefault();
+           }
             return View(gList);
 
 
@@ -112,7 +131,7 @@ namespace Hibernate.Controllers
         public async Task<IActionResult> SRCreate(Group obj)
         {
             if (ModelState.IsValid)
-            {
+            {                
                 var id = _userManager.GetUserId(User);
                 //search salerep table 
                
@@ -197,6 +216,12 @@ namespace Hibernate.Controllers
             }
             if (ModelState.IsValid)
             {
+                if(obj.AssignId == null)
+                {
+                    ModelState.AddModelError("", "You must select a Sales Rep.");
+                    return View(obj);
+                }
+
                 var id = obj.AssignId;
                 //search salerep table 
 
@@ -221,7 +246,7 @@ namespace Hibernate.Controllers
             return View(obj);
         }
 
-        // GET: Groups/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -229,47 +254,92 @@ namespace Hibernate.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups.FindAsync(id);
-            if (@group == null)
+            var group = await _context.Groups.FindAsync(id);
+            if (group == null)
             {
                 return NotFound();
             }
-            return View(@group);
+
+            var gl_role = await _roleManager.FindByNameAsync("Group Leader");
+            var roles_list = _context.UserRoles.ToList();
+            var user_list = _context.ApplicationUser.ToList();
+            List<ApplicationUser> gl_to_add = new List<ApplicationUser>();
+            List<SelectListItem> selectitems = new List<SelectListItem>();
+
+            foreach(var user in user_list)
+            {
+                foreach(var role in roles_list)
+                {
+                    if(gl_role.Id == role.RoleId && role.UserId == user.Id)
+                    {
+                        gl_to_add.Add(user);
+                    }
+                }
+            }
+
+            group.GroupLeaderObj = _context.GroupLeaders.Where(u => u.GroupId == group.GroupId).Select(e => e).FirstOrDefault();
+
+            foreach (var item in gl_to_add)
+            {
+                if (item.Id == group.GroupLeaderObj.UserId)
+                {
+                    SelectListItem newitem = new SelectListItem
+                    {
+                        Text = item.FirstName + " " + item.LastName,
+                        Value = item.Id,
+                        Selected = true
+                    };
+                    selectitems.Add(newitem);
+                }
+                else
+                {
+                    SelectListItem newitem = new SelectListItem
+                    {
+                        Text = item.FirstName + " " + item.LastName,
+                        Value = item.Id,
+                        Selected = false
+                    };
+                    selectitems.Add(newitem);
+                } 
+            }
+
+            group.GL_List = selectitems;
+            return View(group);
         }
 
-        // POST: Groups/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Address,City,State")] Group @group)
+        public async Task<IActionResult> Edit(int id, Group group)
         {
-            if (id != @group.GroupId)
+            //update group info
+            var groupfromdb = await _context.Groups.FindAsync(id);
+            groupfromdb.Name = group.Name;
+            groupfromdb.Address = group.Address;
+            groupfromdb.City = group.City;
+            groupfromdb.State = group.State;
+
+            //update group leader
+            var groupleadersfromdb = _context.GroupLeaders.ToList();
+            foreach(var item in groupleadersfromdb)
             {
-                return NotFound();
+                if(item.GroupId == groupfromdb.GroupId)
+                {
+                    item.UserId = group.GroupLeaderId;
+                }
             }
 
-            if (ModelState.IsValid)
+
+
+            _context.SaveChanges();
+            if(User.IsInRole("Admin"))
             {
-                try
-                {
-                    _context.Update(@group);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GroupExists(@group.GroupId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AdminIndex");
             }
-            return View(@group);
+            else
+            {
+                return RedirectToAction("SRIndex");
+            }
         }
 
         // GET: Groups/Delete/5
@@ -298,12 +368,21 @@ namespace Hibernate.Controllers
             var @group = await _context.Groups.FindAsync(id);
             _context.Groups.Remove(@group);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if(User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminIndex", "Groups");
+            }
+            else
+            {
+                return RedirectToAction("SRIndex", "Groups");
+            }
         }
 
         private bool GroupExists(int id)
         {
             return _context.Groups.Any(e => e.GroupId == id);
         }
+        
+        
     }
 }
